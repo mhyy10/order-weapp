@@ -1,0 +1,37 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page container">
+  <view class="search-header">
+    <text class="search-icon">🔍</text>
+    <input class="search-input" focus placeholder="搜索菜品名称" value="{{keyword}}" bindinput="onInput" confirm-type="search" />
+    <text wx:if="{{keyword}}" class="search-clear" bindtap="onClear">×</text>
+  </view>
+
+  <!-- 搜索中 -->
+  <view wx:if="{{keyword && !searched}}" class="search-loading">
+    <view class="loading-spinner"></view>
+    <text class="search-loading-text">搜索中...</text>
+  </view>
+
+  <!-- 空结果 -->
+  <view wx:if="{{searched && results.length === 0}}" class="empty">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">未找到"{{keyword}}"相关菜品</text>
+    <text class="empty-hint">换个关键词试试</text>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:for="{{results}}" wx:key="id" class="dish-card" bindtap="onDishTap" data-id="{{item.id}}">
+    <image class="dish-image" src="{{item.image || '/assets/icons/menu.png'}}" mode="aspectFill" lazy-load />
+    <view class="dish-info">
+      <text class="dish-name">{{item.name}}</text>
+      <text class="dish-desc">{{item.description}}</text>
+      <view class="dish-bottom">
+        <view class="price-wrap">
+          <text class="price-symbol">¥</text>
+          <text class="price-value">{{item.price}}</text>
+        </view>
+        <view class="btn-add" catchtap="onQuickAdd" data-dish="{{item}}">+</view>
+      </view>
+    </view>
+  </view>
+</view>

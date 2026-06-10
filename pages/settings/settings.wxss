@@ -1,0 +1,12 @@
+.menu-card { margin: 0; }
+.menu-item {
+  display: flex; align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+  transition: background 0.15s;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: var(--bg-gray); margin: 0 -24rpx; padding: 30rpx 24rpx; }
+.menu-title { flex: 1; font-size: 28rpx; color: var(--text); }
+.menu-value { font-size: 26rpx; color: var(--text-light); margin-right: 12rpx; }
+.menu-arrow { font-size: 32rpx; color: var(--text-light); font-weight: 300; }

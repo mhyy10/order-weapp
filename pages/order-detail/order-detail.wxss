@@ -1,0 +1,36 @@
+.status-card { text-align: center; padding: 48rpx 24rpx; }
+.status-icon-wrap {
+  width: 96rpx; height: 96rpx;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16rpx;
+}
+.status-icon { font-size: 48rpx; font-weight: 800; }
+.status-text { font-size: 36rpx; font-weight: 800; display: block; margin-bottom: 12rpx; }
+.status-order-id { font-size: 24rpx; color: var(--text-secondary); display: block; }
+.status-time { font-size: 22rpx; color: var(--text-light); display: block; margin-top: 6rpx; }
+
+.detail-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+}
+.detail-item:last-child { border-bottom: none; }
+.detail-item-info { flex: 1; min-width: 0; }
+.detail-item-name { font-size: 28rpx; color: var(--text); }
+.detail-item-tags { display: flex; gap: 8rpx; margin-top: 4rpx; }
+.detail-item-spec, .detail-item-addons {
+  font-size: 22rpx; color: var(--text-light);
+  background: var(--bg-gray); padding: 2rpx 10rpx; border-radius: 6rpx;
+}
+.detail-item-right { display: flex; align-items: center; gap: 12rpx; }
+.detail-item-qty { font-size: 24rpx; color: var(--text-light); }
+.detail-item-price { font-size: 28rpx; font-weight: 600; color: var(--text); }
+
+.summary-row { display: flex; justify-content: space-between; padding: 12rpx 0; font-size: 26rpx; }
+.summary-row .label { color: var(--text-secondary); }
+.total { padding-top: 16rpx; }
+.total-price { font-size: 36rpx; font-weight: 800; color: var(--price); }
+
+.actions { margin-top: 40rpx; display: flex; gap: 20rpx; }
+.action-btn { flex: 1; text-align: center; padding: 24rpx; }

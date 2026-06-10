@@ -1,0 +1,40 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page container">
+  <view wx:if="{{cartItems.length === 0}}" class="empty fade-in">
+    <text class="empty-icon">🛒</text>
+    <text class="empty-text">购物车空空如也</text>
+    <text class="empty-hint">去发现美味菜品吧</text>
+    <navigator url="/pages/index/index" open-type="switchTab" class="btn-primary" style="margin-top:32rpx;">去点餐</navigator>
+  </view>
+  <view wx:else class="fade-in">
+    <view class="flex-between" style="margin-bottom:20rpx;">
+      <text style="font-size:30rpx;font-weight:700;">已选 {{count}} 件</text>
+      <view style="font-size:26rpx;color:var(--text-light);padding:8rpx;" bindtap="onClear">🗑 清空</view>
+    </view>
+    <view wx:for="{{cartItems}}" wx:key="cartKey" class="card cart-item">
+      <view class="cart-item-info">
+        <text class="cart-item-name">{{item.name}}</text>
+        <view class="cart-item-tags">
+          <text class="cart-item-spec" wx:if="{{item.spec}}">{{item.spec}}</text>
+          <text class="cart-item-addons" wx:if="{{item.addons.length > 0}}">{{f.joinAddons(item.addons)}}</text>
+        </view>
+      </view>
+      <view class="cart-item-right">
+        <text class="price">{{f.itemTotal(item.price, item.quantity)}}</text>
+        <view class="stepper" style="margin-top:12rpx;">
+          <view class="stepper-btn stepper-btn-minus" bindtap="onMinus" data-key="{{item.cartKey}}">-</view>
+          <text class="stepper-num">{{item.quantity}}</text>
+          <view class="stepper-btn stepper-btn-plus" bindtap="onAdd" data-key="{{item.cartKey}}">+</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-bar safe-bottom">
+      <view class="bottom-total-wrap">
+        <text class="bottom-total-label">合计</text>
+        <text class="bottom-total">¥{{total}}</text>
+      </view>
+      <view class="btn-primary checkout-btn" bindtap="onCheckout">去结算</view>
+    </view>
+  </view>
+</view>

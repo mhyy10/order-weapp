@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/order-list/order-list",
+    "pages/profile/profile",
+    "pages/order-confirm/order-confirm",
+    "pages/order-detail/order-detail",
+    "pages/dish-detail/dish-detail",
+    "pages/cart/cart",
+    "pages/favorites/favorites",
+    "pages/table-scan/table-scan",
+    "pages/queue/queue",
+    "pages/settings/settings",
+    "pages/search/search"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#FF6B35",
+    "navigationBarTitleText": "小灶点餐",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFF8F0",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF6B35",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "点餐",
+        "iconPath": "assets/icons/menu.png",
+        "selectedIconPath": "assets/icons/menu_active.png"
+      },
+      {
+        "pagePath": "pages/order-list/order-list",
+        "text": "订单",
+        "iconPath": "assets/icons/order.png",
+        "selectedIconPath": "assets/icons/order_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

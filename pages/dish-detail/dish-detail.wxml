@@ -1,0 +1,88 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page">
+  <view wx:if="{{loading}}" class="flex-center" style="padding:200rpx 0;">
+    <view class="loading-spinner"></view>
+  </view>
+  <view wx:elif="{{dish}}" class="fade-in">
+    <!-- Hero image -->
+    <view class="hero">
+      <image class="hero-img" src="{{dish.image || '/assets/icons/menu.png'}}" mode="aspectFill" />
+      <view class="fav-btn {{isFavorited ? 'active' : ''}}" bindtap="onFavoriteTap">
+        <text>{{isFavorited ? '❤' : '♡'}}</text>
+      </view>
+    </view>
+
+    <!-- Info -->
+    <view class="info-card">
+      <view class="info-header">
+        <text class="dish-name">{{dish.name}}</text>
+        <view wx:if="{{dish.tags.length > 0}}" class="dish-tags">
+          <text wx:for="{{dish.tags}}" wx:key="*this" class="tag tag-hot">{{item}}</text>
+        </view>
+      </view>
+      <text class="dish-desc">{{dish.description}}</text>
+      <view class="dish-meta">
+        <text wx:if="{{dish.rating}}">⭐ {{dish.rating}}</text>
+        <text wx:if="{{dish.sales > 0}}" style="margin-left:16rpx;">月售 {{dish.sales}}</text>
+      </view>
+      <view class="price-row">
+        <text class="price-symbol">¥</text>
+        <text class="price-value">{{dish.price}}</text>
+        <text wx:if="{{dish.originalPrice > 0}}" class="price-original">¥{{dish.originalPrice}}</text>
+      </view>
+    </view>
+
+    <!-- Specs preview -->
+    <view wx:if="{{dish.specs.length > 0}}" class="info-card">
+      <text class="section-label">规格</text>
+      <view wx:for="{{dish.specs}}" wx:key="name" wx:for-item="sg">
+        <text class="spec-label">{{sg.name}}</text>
+        <view class="spec-tags">
+          <text wx:for="{{sg.options}}" wx:key="name" wx:for-item="opt" class="spec-tag">
+            {{opt.name}}{{opt.price > 0 ? ' +¥'+opt.price : ''}}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Bottom action -->
+    <view class="bottom-bar safe-bottom">
+      <view class="btn-primary add-btn" bindtap="onAddToCart">加入购物车 ¥{{dish.price}}</view>
+    </view>
+  </view>
+
+  <!-- Spec modal -->
+  <view class="spec-overlay {{showSpec ? 'show' : ''}}" catchtap="onSpecClose">
+    <view class="spec-panel" catchtap="">
+      <view class="spec-header">
+        <text class="spec-title">{{dish.name}}</text>
+        <view class="spec-close" bindtap="onSpecClose">×</view>
+      </view>
+      <scroll-view class="spec-body" scroll-y>
+        <view wx:for="{{dish.specs}}" wx:key="name" wx:for-item="sg" class="spec-group">
+          <text class="spec-group-title">{{sg.name}}</text>
+          <view class="spec-options">
+            <view wx:for="{{sg.options}}" wx:key="name" wx:for-item="opt"
+              class="spec-option {{selectedSpec === opt.name ? 'active' : ''}}"
+              bindtap="onSpecSelect" data-value="{{opt.name}}">
+              {{opt.name}}
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{dish.addons.length > 0}}" class="spec-group">
+          <text class="spec-group-title">加料</text>
+          <view class="spec-options">
+            <view wx:for="{{dish.addons}}" wx:key="name" wx:for-item="addon"
+              class="spec-option {{selectedAddons.indexOf(addon.name) > -1 ? 'active' : ''}}"
+              bindtap="onAddonToggle" data-value="{{addon.name}}">
+              {{addon.name}} +¥{{addon.price}}
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="spec-footer safe-bottom">
+        <view class="btn-primary" style="width:100%;text-align:center;padding:28rpx 0;" bindtap="onSpecAdd">加入购物车</view>
+      </view>
+    </view>
+  </view>
+</view>

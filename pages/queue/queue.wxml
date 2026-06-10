@@ -1,0 +1,54 @@
+<view class="page container">
+  <view wx:if="{{queueInfo}}" class="queue-card card fade-in">
+    <view class="queue-no-wrap">
+      <text class="queue-no">{{queueInfo.queueNo}}</text>
+    </view>
+    <text class="queue-label">您的排队号码</text>
+    <view class="queue-info">
+      <view class="queue-stat">
+        <text class="queue-stat-num">{{queueInfo.position}}</text>
+        <text class="queue-stat-label">前方桌数</text>
+      </view>
+      <view class="queue-stat-divider"></view>
+      <view class="queue-stat">
+        <text class="queue-stat-num">~{{queueInfo.waitEstimate}}</text>
+        <text class="queue-stat-label">预计等待(分钟)</text>
+      </view>
+    </view>
+    <view class="queue-status">
+      <view class="queue-status-dot"></view>
+      <text>等位中</text>
+    </view>
+    <view class="btn-outline" style="margin-top:40rpx;" bindtap="onCancelQueue">取消排队</view>
+  </view>
+
+  <view wx:else class="empty fade-in">
+    <text class="empty-icon">📣</text>
+    <text class="empty-text">您还没有排队</text>
+    <text class="empty-hint">取号后可实时查看排队进度</text>
+    <view class="btn-primary" style="margin-top:32rpx;" bindtap="onJoinShow">立即取号</view>
+  </view>
+
+  <!-- Join modal -->
+  <view class="overlay {{showJoin ? 'show' : ''}}" catchtap="onJoinClose">
+    <view class="join-panel" catchtap="">
+      <view class="join-header">
+        <text class="join-title">取号排队</text>
+        <view class="join-close" bindtap="onJoinClose">×</view>
+      </view>
+      <view class="join-row">
+        <text class="join-label">就餐人数</text>
+        <view class="people-stepper">
+          <view class="stepper-btn stepper-btn-minus" bindtap="onPeopleChange" data-op="minus">-</view>
+          <text class="stepper-num">{{peopleCount}} 位</text>
+          <view class="stepper-btn stepper-btn-plus" bindtap="onPeopleChange" data-op="add">+</view>
+        </view>
+      </view>
+      <view class="join-row">
+        <text class="join-label">手机号</text>
+        <input class="join-input" type="number" maxlength="11" placeholder="用于叫号通知" value="{{phone}}" bindinput="onPhoneInput" />
+      </view>
+      <view class="btn-primary" style="margin-top:32rpx;width:100%;text-align:center;padding:28rpx 0;" bindtap="onJoin">确认取号</view>
+    </view>
+  </view>
+</view>

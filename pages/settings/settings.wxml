@@ -1,0 +1,9 @@
+<view class="page container fade-in">
+  <view class="card menu-card">
+    <view wx:for="{{settings}}" wx:key="title" class="menu-item" bindtap="onTap" data-action="{{item.action}}">
+      <text class="menu-title">{{item.title}}</text>
+      <text class="menu-value">{{item.value || ''}}</text>
+      <text class="menu-arrow" wx:if="{{item.action}}">›</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,47 @@
+<view class="page">
+  <!-- User header -->
+  <view class="user-header">
+    <view class="avatar-wrap">
+      <image wx:if="{{userInfo.avatar}}" class="avatar-img" src="{{userInfo.avatar}}" mode="aspectFill" />
+      <text wx:else class="avatar-text">🍽️</text>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickname || '美食家'}}</text>
+      <text class="user-id">ID: {{userInfo.id || '-'}}</text>
+    </view>
+  </view>
+
+  <!-- Quick stats -->
+  <view class="stats-row">
+    <navigator url="/pages/order-list/order-list" class="stat-item">
+      <text class="stat-num">{{orderCount}}</text>
+      <text class="stat-label">订单</text>
+    </navigator>
+    <navigator url="/pages/favorites/favorites" class="stat-item">
+      <text class="stat-num">{{favCount}}</text>
+      <text class="stat-label">收藏</text>
+    </navigator>
+    <navigator url="/pages/queue/queue" class="stat-item">
+      <text class="stat-num">-</text>
+      <text class="stat-label">排队</text>
+    </navigator>
+  </view>
+
+  <!-- Scan table -->
+  <view class="card scan-card" bindtap="onScanTable">
+    <view class="scan-icon-wrap">
+      <text class="scan-icon">📷</text>
+    </view>
+    <text class="scan-text">扫码点餐</text>
+    <text class="scan-hint">扫描桌上二维码开始点餐</text>
+  </view>
+
+  <!-- Menu -->
+  <view class="card menu-card">
+    <view wx:for="{{menuItems}}" wx:key="title" class="menu-item" bindtap="onMenuTap" data-url="{{item.url}}">
+      <text class="menu-icon">{{item.icon}}</text>
+      <text class="menu-title">{{item.title}}</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+</view>

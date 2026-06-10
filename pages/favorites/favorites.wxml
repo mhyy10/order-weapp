@@ -1,0 +1,39 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page container">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="card fav-card fade-in">
+      <view class="skeleton" style="width:120rpx;height:120rpx;border-radius:var(--radius-md);flex-shrink:0;"></view>
+      <view class="fav-info">
+        <view class="skeleton skeleton-text" style="width:50%"></view>
+        <view class="skeleton skeleton-text-sm" style="width:80%"></view>
+        <view class="skeleton" style="width:80rpx;height:32rpx;margin-top:8rpx;"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{favorites.length === 0}}" class="empty fade-in">
+    <text class="empty-icon">❤️</text>
+    <text class="empty-text">还没有收藏的菜品</text>
+    <text class="empty-hint">浏览菜品时点击 ❤ 收藏</text>
+  </view>
+
+  <!-- 收藏列表 -->
+  <view wx:else class="fade-in">
+    <view wx:for="{{favorites}}" wx:key="id" class="card fav-card">
+      <image class="fav-image" src="{{item.image || '/assets/icons/menu.png'}}" mode="aspectFill" lazy-load bindtap="onDishTap" data-id="{{item.id}}" />
+      <view class="fav-info" bindtap="onDishTap" data-id="{{item.id}}">
+        <text class="fav-name">{{item.name}}</text>
+        <text class="fav-desc">{{f.truncate(item.description, 10)}}</text>
+        <view class="fav-bottom">
+          <text class="price">{{f.formatPrice(item.price)}}</text>
+        </view>
+      </view>
+      <view class="fav-actions">
+        <view class="fav-add" bindtap="onAddCart" data-dish="{{item}}">🛒</view>
+        <view class="fav-remove" bindtap="onRemove" data-id="{{item.id}}">取消</view>
+      </view>
+    </view>
+  </view>
+</view>

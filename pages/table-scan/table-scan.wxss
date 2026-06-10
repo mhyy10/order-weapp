@@ -1,0 +1,32 @@
+.scan-area { display: flex; flex-direction: column; align-items: center; padding-top: 100rpx; }
+.scan-frame {
+  width: 500rpx; height: 500rpx;
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 60rpx;
+  background: rgba(255,107,53,0.03);
+  position: relative;
+  overflow: hidden;
+}
+.scan-corners { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+.corner {
+  position: absolute; width: 48rpx; height: 48rpx;
+  border-color: var(--primary);
+  border-style: solid;
+  border-width: 0;
+}
+.corner-tl { top: 0; left: 0; border-top-width: 6rpx; border-left-width: 6rpx; border-radius: 8rpx 0 0 0; }
+.corner-tr { top: 0; right: 0; border-top-width: 6rpx; border-right-width: 6rpx; border-radius: 0 8rpx 0 0; }
+.corner-bl { bottom: 0; left: 0; border-bottom-width: 6rpx; border-left-width: 6rpx; border-radius: 0 0 0 8rpx; }
+.corner-br { bottom: 0; right: 0; border-bottom-width: 6rpx; border-right-width: 6rpx; border-radius: 0 0 8rpx 0; }
+
+.scan-line {
+  position: absolute; top: 0; left: 20rpx; right: 20rpx;
+  height: 4rpx;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: scanMove 2s linear infinite;
+}
+@keyframes scanMove { 0% { top: 20rpx; } 100% { top: 480rpx; } }
+
+.scan-tip { font-size: 28rpx; color: var(--text-secondary); z-index: 1; }
+.scan-actions { width: 400rpx; text-align: center; }

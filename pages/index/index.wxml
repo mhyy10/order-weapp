@@ -1,0 +1,218 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page">
+  <!-- Header -->
+  <view class="header">
+    <view class="header-left">
+      <text class="brand">小灶点餐</text>
+      <view class="table-tag" wx:if="{{tableNo}}">
+        <text class="table-tag-text">桌 {{tableNo}}</text>
+      </view>
+    </view>
+    <view class="header-right">
+      <view class="search-btn" bindtap="onSearchTap">
+        <text class="icon-search">🔍</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Main content -->
+  <view class="main-wrap">
+    <!-- Left sidebar -->
+    <scroll-view class="category-sidebar" scroll-y enhanced show-scrollbar="{{false}}">
+      <view
+        wx:for="{{categories}}"
+        wx:key="id"
+        class="category-item {{currentCategoryId === item.id ? 'active' : ''}}"
+        bindtap="onCategoryTap"
+        data-id="{{item.id}}"
+      >
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <!-- Right dish list -->
+    <scroll-view
+      class="dish-list-wrap"
+      scroll-y
+      enhanced
+      show-scrollbar="{{false}}"
+      scroll-into-view="{{scrollToView}}"
+      scroll-with-animation
+      bindscroll="onDishScroll"
+    >
+      <!-- 骨架屏 -->
+      <block wx:if="{{loading}}">
+        <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="dish-card fade-in">
+          <view class="skeleton skeleton-rect"></view>
+          <view class="dish-info">
+            <view class="skeleton skeleton-text" style="width:70%"></view>
+            <view class="skeleton skeleton-text-sm" style="width:90%"></view>
+            <view style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;">
+              <view class="skeleton" style="width:100rpx;height:36rpx"></view>
+              <view class="skeleton" style="width:48rpx;height:48rpx;border-radius:50%"></view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 实际内容 -->
+      <block wx:else>
+        <view wx:for="{{categories}}" wx:key="id" wx:for-item="cat" id="cat_{{cat.id}}" class="dish-section" data-catid="{{cat.id}}">
+          <view class="section-title">
+            <text class="section-name">{{cat.name}}</text>
+            <text class="section-count">{{dishesByCategory[cat.id].length}}款</text>
+          </view>
+
+          <view
+            wx:for="{{dishesByCategory[cat.id]}}"
+            wx:key="id"
+            wx:for-item="dish"
+            class="dish-card"
+          >
+            <image class="dish-image" src="{{dish.image || '/assets/icons/menu.png'}}" mode="aspectFill" lazy-load bindtap="onDishTap" data-id="{{dish.id}}" />
+            <view class="dish-info">
+              <view class="dish-header">
+                <text class="dish-name">{{dish.name}}</text>
+                <view wx:if="{{dish.tags.length > 0}}" class="dish-tags">
+                  <text wx:for="{{dish.tags}}" wx:key="*this" wx:for-item="tag" class="tag tag-hot">{{tag}}</text>
+                </view>
+              </view>
+              <text class="dish-desc">{{f.truncate(dish.description, 12)}}</text>
+              <view class="dish-meta" wx:if="{{dish.sales > 0}}">
+                <text class="dish-sales">月售{{dish.sales}}</text>
+              </view>
+              <view class="dish-bottom">
+                <view class="price-wrap">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-value">{{dish.price}}</text>
+                  <text wx:if="{{dish.originalPrice > 0}}" class="price-original">¥{{dish.originalPrice}}</text>
+                </view>
+                <view class="dish-actions">
+                  <view wx:if="{{dish.specs.length > 0}}" class="btn-spec" bindtap="onQuickAdd" data-dish="{{dish}}">选规格</view>
+                  <view wx:else class="stepper">
+                    <view class="stepper-btn stepper-btn-minus" wx:if="{{dish._cartCount > 0}}" bindtap="onCartMinus" data-id="{{dish.id}}">-</view>
+                    <text class="stepper-num" wx:if="{{dish._cartCount > 0}}">{{dish._cartCount}}</text>
+                    <view class="stepper-btn stepper-btn-plus" bindtap="onQuickAdd" data-dish="{{dish}}">+</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- Bottom safe area -->
+        <view style="height: 160rpx;"></view>
+      </block>
+    </scroll-view>
+  </view>
+
+  <!-- Cart bar -->
+  <view class="cart-bar {{cartCount > 0 ? 'show' : ''}}" wx:if="{{cartCount > 0}}">
+    <view class="cart-bar-left" bindtap="toggleCart">
+      <view class="cart-icon-wrap">
+        <text class="cart-icon">🛒</text>
+        <view class="cart-badge">{{cartCount}}</view>
+      </view>
+      <view class="cart-price-wrap">
+        <text class="cart-total-label">合计</text>
+        <text class="cart-total">¥{{cartTotal}}</text>
+      </view>
+    </view>
+    <view class="cart-bar-btn" bindtap="onGoCheckout">去结算</view>
+  </view>
+
+  <!-- Cart overlay -->
+  <view class="cart-overlay {{showCart ? 'show' : ''}}" bindtap="hideCart">
+    <view class="cart-panel" catchtap="">
+      <view class="cart-panel-header">
+        <text class="cart-panel-title">已选菜品</text>
+        <view class="cart-clear" bindtap="onClearCart">
+          <text>🗑 清空</text>
+        </view>
+      </view>
+      <scroll-view class="cart-panel-list" scroll-y>
+        <view wx:for="{{cartItems}}" wx:key="cartKey" class="cart-item">
+          <view class="cart-item-info">
+            <text class="cart-item-name">{{item.name}}</text>
+            <view class="cart-item-tags">
+              <text class="cart-item-spec" wx:if="{{item.spec}}">{{item.spec}}</text>
+              <text class="cart-item-addons" wx:if="{{item.addons.length > 0}}">{{f.joinAddons(item.addons)}}</text>
+            </view>
+          </view>
+          <view class="cart-item-right">
+            <text class="cart-item-price">{{f.itemTotal(item.price, item.quantity)}}</text>
+            <view class="stepper">
+              <view class="stepper-btn stepper-btn-minus" bindtap="onCartMinus" data-key="{{item.cartKey}}">-</view>
+              <text class="stepper-num">{{item.quantity}}</text>
+              <view class="stepper-btn stepper-btn-plus" bindtap="onCartAdd" data-key="{{item.cartKey}}">+</view>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{cartItems.length === 0}}" class="empty" style="padding:60rpx 0;">
+          <text class="empty-icon" style="font-size:60rpx;">🛒</text>
+          <text class="empty-text">购物车为空</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- Spec modal -->
+  <view class="spec-overlay {{showSpec ? 'show' : ''}}" catchtap="onSpecClose">
+    <view class="spec-panel" catchtap="">
+      <view class="spec-header">
+        <view class="spec-header-info">
+          <text class="spec-dish-name">{{currentDish.name}}</text>
+          <text class="spec-dish-price">{{f.formatPrice(currentDish.price)}}</text>
+        </view>
+        <view class="spec-close" bindtap="onSpecClose">×</view>
+      </view>
+      <scroll-view class="spec-body" scroll-y>
+        <!-- Specs -->
+        <view wx:for="{{currentDish.specs}}" wx:key="name" wx:for-item="specGroup" class="spec-group">
+          <text class="spec-group-title">{{specGroup.name}}</text>
+          <view class="spec-options">
+            <view
+              wx:for="{{specGroup.options}}"
+              wx:key="name"
+              wx:for-item="opt"
+              class="spec-option {{selectedSpec === opt.name ? 'active' : ''}}"
+              bindtap="onSpecSelect"
+              data-value="{{opt.name}}"
+            >
+              <text>{{opt.name}}</text>
+              <text class="spec-option-price" wx:if="{{opt.price > 0}}">+¥{{opt.price}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- Addons -->
+        <view wx:if="{{currentDish.addons.length > 0}}" class="spec-group">
+          <text class="spec-group-title">加料</text>
+          <view class="spec-options">
+            <view
+              wx:for="{{currentDish.addons}}"
+              wx:key="name"
+              wx:for-item="addon"
+              class="spec-option {{selectedAddons.indexOf(addon.name) > -1 ? 'active' : ''}}"
+              bindtap="onAddonToggle"
+              data-value="{{addon.name}}"
+            >
+              <text>{{addon.name}}</text>
+              <text class="spec-option-price" wx:if="{{addon.price > 0}}">+¥{{addon.price}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- Note -->
+        <view class="spec-group">
+          <text class="spec-group-title">备注</text>
+          <input class="spec-note-input" placeholder="如：少放辣、不要香菜" value="{{dishNote}}" bindinput="onDishNoteInput" />
+        </view>
+      </scroll-view>
+
+      <view class="spec-footer safe-bottom">
+        <view class="btn-primary spec-add-btn" bindtap="onSpecAdd">加入购物车</view>
+      </view>
+    </view>
+  </view>
+</view>

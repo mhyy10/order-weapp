@@ -1,0 +1,18 @@
+<view class="page fade-in">
+  <view class="scan-area">
+    <view class="scan-frame">
+      <view class="scan-corners">
+        <view class="corner corner-tl"></view>
+        <view class="corner corner-tr"></view>
+        <view class="corner corner-bl"></view>
+        <view class="corner corner-br"></view>
+      </view>
+      <view class="scan-line"></view>
+      <text class="scan-tip">{{scanning ? '扫描中...' : '将桌号二维码放入框内'}}</text>
+    </view>
+    <view class="scan-actions">
+      <view class="btn-primary" bindtap="startScan">📷 扫码</view>
+      <view class="btn-outline" style="margin-top:24rpx;" bindtap="onManualInput">⌨️ 手动输入</view>
+    </view>
+  </view>
+</view>

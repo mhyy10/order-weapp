@@ -1,0 +1,66 @@
+.queue-card { text-align: center; padding: 48rpx 24rpx; }
+.queue-no-wrap {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  padding: 16rpx 48rpx;
+  border-radius: var(--radius-lg);
+  margin-bottom: 16rpx;
+}
+.queue-no { font-size: 72rpx; font-weight: 900; color: var(--text-white); display: block; }
+.queue-label { font-size: 26rpx; color: var(--text-secondary); display: block; margin-bottom: 36rpx; }
+
+.queue-info {
+  display: flex; justify-content: center; align-items: center;
+  gap: 0; margin-bottom: 28rpx;
+}
+.queue-stat { flex: 1; text-align: center; }
+.queue-stat-divider { width: 1rpx; height: 60rpx; background: var(--divider); }
+.queue-stat-num { font-size: 44rpx; font-weight: 800; color: var(--text); display: block; }
+.queue-stat-label { font-size: 22rpx; color: var(--text-secondary); display: block; margin-top: 6rpx; }
+
+.queue-status {
+  display: inline-flex; align-items: center; gap: 8rpx;
+  font-size: 26rpx; color: var(--primary);
+  padding: 12rpx 28rpx;
+  background: var(--primary-bg);
+  border-radius: 28rpx;
+  font-weight: 600;
+}
+.queue-status-dot {
+  width: 12rpx; height: 12rpx;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.overlay.show { opacity: 1; pointer-events: auto; }
+
+.join-panel {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--bg-white);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 32rpx;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.overlay.show .join-panel { transform: translateY(0); }
+
+.join-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24rpx; }
+.join-title { font-size: 34rpx; font-weight: 700; }
+.join-close { font-size: 44rpx; color: var(--text-light); padding: 8rpx; line-height: 1; }
+
+.join-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+}
+.join-label { font-size: 28rpx; color: var(--text); }
+.join-input { text-align: right; font-size: 28rpx; flex: 1; }
+.people-stepper { display: flex; align-items: center; }
