@@ -40,7 +40,11 @@
       </view>
       <view class="order-footer">
         <text class="order-time">{{item.timeStr}}</text>
-        <text class="order-total">¥{{item.total}}</text>
+        <view class="order-footer-right">
+          <view wx:if="{{item.status === 'completed' && !item.reviewed}}" class="review-tag" catchtap="onReview" data-id="{{item.id}}">📝 评价</view>
+          <view wx:elif="{{item.status === 'completed' && item.reviewed}}" class="review-tag reviewed">已评价</view>
+          <text class="order-total">¥{{item.total}}</text>
+        </view>
       </view>
     </view>
 

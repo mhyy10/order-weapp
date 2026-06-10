@@ -43,7 +43,8 @@ Page({
         statusText: getStatusText(o.status),
         statusColor: getStatusColor(o.status),
         timeStr: formatDate(o.createdAt, 'MM-DD HH:mm'),
-        itemCount: o.items.reduce((s, i) => s + i.quantity, 0)
+        itemCount: o.items.reduce((s, i) => s + i.quantity, 0),
+        reviewed: false  // 默认未评价，后续查询
       }))
 
       this.setData({
@@ -53,7 +54,27 @@ Page({
         loadingMore: false,
         hasMore: formatted.length >= DEFAULT_PAGE_SIZE
       })
+
+      // 批量查询已完成订单的评价状态
+      this.checkReviewedOrders(formatted)
     }).catch(() => this.setData({ loading: false, loadingMore: false }))
+  },
+
+  checkReviewedOrders(orders) {
+    const completedOrders = orders.filter(o => o.status === 'completed')
+    if (completedOrders.length === 0) return
+
+    // 逐个查询评价状态（可优化为批量接口）
+    completedOrders.forEach(o => {
+      get(API.REVIEW.BY_ORDER, { orderId: o.id }).then(review => {
+        if (review) {
+          const idx = this.data.orders.findIndex(item => item.id === o.id)
+          if (idx > -1) {
+            this.setData({ [`orders[${idx}].reviewed`]: true })
+          }
+        }
+      }).catch(() => {})
+    })
   },
 
   onReachBottom() {
@@ -65,6 +86,11 @@ Page({
   onOrderTap(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: `/pages/order-detail/order-detail?id=${id}` })
+  },
+
+  onReview(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({ url: `/pages/review/review?orderId=${id}` })
   },
 
   onPullDownRefresh() {

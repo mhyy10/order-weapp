@@ -1,4 +1,5 @@
 const { API, post } = require('./utils/api')
+const socket = require('./utils/socket')
 
 App({
   globalData: {
@@ -6,7 +7,8 @@ App({
     userId: null,
     tableNo: '',
     cartItems: [],
-    dineType: 'dine_in'
+    dineType: 'dine_in',
+    unreadNotify: 0
   },
 
   onLaunch() {
@@ -15,6 +17,22 @@ App({
     // 恢复购物车
     const cart = wx.getStorageSync('cartItems')
     if (cart) this.globalData.cartItems = cart
+    // 初始化 WebSocket
+    this.initSocket()
+  },
+
+  initSocket() {
+    const userId = this.getUserId()
+    if (userId) {
+      socket.connect(userId)
+      socket.on('order:status', (data) => {
+        this.globalData.unreadNotify++
+        wx.showToast({ title: `订单${data.status === 'completed' ? '已完成' : '已取消'}`, icon: 'none' })
+      })
+      socket.on('queue:call', (data) => {
+        wx.showToast({ title: `叫号: ${data.queueNo}`, icon: 'none' })
+      })
+    }
   },
 
   login() {

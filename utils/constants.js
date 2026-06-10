@@ -1,15 +1,14 @@
 /**
  * 业务常量配置
- * 集中管理所有魔法数字，便于维护和修改
  */
 
 module.exports = {
   // 折扣规则
-  DISCOUNT_THRESHOLD: 100,    // 满减门槛（元）
-  DISCOUNT_AMOUNT: 5,         // 满减金额（元）
+  DISCOUNT_THRESHOLD: 100,
+  DISCOUNT_AMOUNT: 5,
 
   // 服务费
-  SERVICE_FEE_PER_PERSON: 3,  // 堂食每人服务费（元）
+  SERVICE_FEE_PER_PERSON: 3,
 
   // 人数限制
   MIN_PEOPLE_COUNT: 1,
@@ -28,6 +27,12 @@ module.exports = {
   DINE_TYPE: {
     DINE_IN: 'dine_in',
     TAKEAWAY: 'takeaway'
+  },
+
+  // 优惠券类型
+  COUPON_TYPE: {
+    REDUCTION: 'reduction',  // 满减
+    DISCOUNT: 'discount'     // 折扣
   },
 
   // 搜索

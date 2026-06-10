@@ -53,6 +53,10 @@
       <text class="label" style="color:var(--success);">新客立减</text>
       <text style="color:var(--success);">-¥{{discount}}</text>
     </view>
+    <view class="summary-row" wx:if="{{couponDiscount > 0}}">
+      <text class="label" style="color:var(--success);">优惠券</text>
+      <text style="color:var(--success);">-¥{{couponDiscount}}</text>
+    </view>
     <view class="summary-row" wx:if="{{dineType === 'dine_in'}}">
       <text class="label">餐位费</text>
       <text>¥3/位 × {{peopleCount}}</text>
@@ -61,6 +65,27 @@
     <view class="summary-row total-row">
       <text style="font-weight:600;">合计</text>
       <text class="total-price">¥{{total}}</text>
+    </view>
+  </view>
+
+  <!-- Coupon -->
+  <view class="card" wx:if="{{availableCoupons.length > 0}}">
+    <text class="card-title">优惠券</text>
+    <view wx:for="{{availableCoupons}}" wx:key="userCouponId" class="coupon-item {{selectedCoupon.userCouponId === item.userCouponId ? 'selected' : ''}}" bindtap="onSelectCoupon" data-idx="{{index}}">
+      <view class="coupon-item-info">
+        <text class="coupon-item-name">{{item.couponName}}</text>
+        <text class="coupon-item-desc">{{item.couponType === 'reduction' ? '满减券' : '折扣券'}}</text>
+      </view>
+      <view class="coupon-item-right">
+        <text class="coupon-item-discount">-¥{{item.discount}}</text>
+        <view class="coupon-check {{selectedCoupon.userCouponId === item.userCouponId ? 'checked' : ''}}">
+          <text wx:if="{{selectedCoupon.userCouponId === item.userCouponId}}">✓</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{availableCoupons.length === 0}}" class="no-coupon">
+      <text class="no-coupon-text">暂无可用优惠券</text>
+      <navigator url="/pages/coupon/coupon" class="no-coupon-link">去领券</navigator>
     </view>
   </view>
 

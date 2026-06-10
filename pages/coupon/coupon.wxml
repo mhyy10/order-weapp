@@ -1,0 +1,63 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page">
+  <!-- Tabs -->
+  <view class="tabs">
+    <view class="tab {{tab === 'available' ? 'active' : ''}}" bindtap="onTabChange" data-tab="available">可使用</view>
+    <view class="tab {{tab === 'expired' ? 'active' : ''}}" bindtap="onTabChange" data-tab="expired">已使用/过期</view>
+    <view class="tab {{tab === 'all' ? 'active' : ''}}" bindtap="onTabChange" data-tab="all">领券中心</view>
+  </view>
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="coupon-card fade-in">
+      <view class="coupon-left">
+        <view class="skeleton" style="width:60rpx;height:48rpx"></view>
+        <view class="skeleton skeleton-text-sm" style="width:80%"></view>
+      </view>
+      <view class="coupon-right">
+        <view class="skeleton skeleton-text" style="width:70%"></view>
+        <view class="skeleton skeleton-text-sm" style="width:50%"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 我的优惠券 -->
+  <block wx:elif="{{tab !== 'all'}}">
+    <view wx:if="{{filteredCoupons.length === 0}}" class="empty fade-in">
+      <text class="empty-icon">🎫</text>
+      <text class="empty-text">{{tab === 'available' ? '暂无可用优惠券' : '暂无记录'}}</text>
+      <text class="empty-hint">去领券中心看看吧</text>
+    </view>
+    <view wx:for="{{filteredCoupons}}" wx:key="id" class="coupon-card fade-in">
+      <view class="coupon-left {{item.status !== 'available' ? 'disabled' : ''}}">
+        <text class="coupon-value">{{item.coupon.type === 'reduction' ? '¥' + item.coupon.value : item.coupon.value * 10 + '折'}}</text>
+        <text class="coupon-threshold">满{{item.coupon.threshold}}可用</text>
+      </view>
+      <view class="coupon-right">
+        <text class="coupon-name">{{item.coupon.name}}</text>
+        <text class="coupon-date">{{item.coupon.startDate}} ~ {{item.coupon.endDate}}</text>
+        <view class="coupon-status {{item.status}}">{{item.status === 'available' ? '可使用' : item.status === 'used' ? '已使用' : '已过期'}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 领券中心 -->
+  <block wx:else>
+    <view wx:if="{{availableCoupons.length === 0}}" class="empty fade-in">
+      <text class="empty-icon">🎫</text>
+      <text class="empty-text">暂无可领取的优惠券</text>
+    </view>
+    <view wx:for="{{availableCoupons}}" wx:key="id" class="coupon-card fade-in">
+      <view class="coupon-left highlight">
+        <text class="coupon-value">{{item.type === 'reduction' ? '¥' + item.value : item.value * 10 + '折'}}</text>
+        <text class="coupon-threshold">满{{item.threshold}}可用</text>
+      </view>
+      <view class="coupon-right">
+        <text class="coupon-name">{{item.name}}</text>
+        <text class="coupon-date">{{item.startDate}} ~ {{item.endDate}}</text>
+        <text class="coupon-remain">剩余 {{item.total - item.claimed}} 张</text>
+        <view class="coupon-claim-btn" bindtap="onClaim" data-id="{{item.id}}">领取</view>
+      </view>
+    </view>
+  </block>
+</view>

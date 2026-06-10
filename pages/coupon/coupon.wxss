@@ -1,0 +1,64 @@
+.page { background: var(--bg); min-height: 100vh; }
+
+.tabs {
+  display: flex; background: var(--bg-white);
+  border-bottom: 1rpx solid var(--divider);
+  position: sticky; top: 0; z-index: 10;
+}
+.tab {
+  flex: 1; text-align: center; padding: 24rpx 0;
+  font-size: 28rpx; color: var(--text-secondary);
+  position: relative;
+}
+.tab.active { color: var(--primary); font-weight: 600; }
+.tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%); width: 48rpx; height: 4rpx;
+  background: var(--primary); border-radius: 2rpx;
+}
+
+.coupon-card {
+  display: flex; margin: 16rpx 24rpx;
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.coupon-left {
+  width: 200rpx; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28rpx 16rpx;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--text-white);
+}
+.coupon-left.disabled { background: #ccc; }
+.coupon-left.highlight { background: linear-gradient(135deg, #FF4D4F, #FF7875); }
+
+.coupon-value { font-size: 48rpx; font-weight: 900; line-height: 1.1; }
+.coupon-threshold { font-size: 20rpx; opacity: 0.8; margin-top: 4rpx; }
+
+.coupon-right {
+  flex: 1; padding: 24rpx;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative;
+}
+.coupon-name { font-size: 28rpx; font-weight: 600; color: var(--text); }
+.coupon-date { font-size: 22rpx; color: var(--text-light); margin-top: 6rpx; }
+.coupon-remain { font-size: 22rpx; color: var(--text-light); margin-top: 4rpx; }
+
+.coupon-status {
+  position: absolute; top: 16rpx; right: 16rpx;
+  font-size: 20rpx; padding: 4rpx 12rpx; border-radius: 16rpx;
+}
+.coupon-status.available { background: #FFF0E6; color: var(--primary); }
+.coupon-status.used { background: var(--bg-gray); color: var(--text-light); }
+.coupon-status.expired { background: var(--bg-gray); color: var(--text-light); }
+
+.coupon-claim-btn {
+  position: absolute; bottom: 16rpx; right: 16rpx;
+  background: var(--primary); color: var(--text-white);
+  font-size: 24rpx; font-weight: 600;
+  padding: 8rpx 24rpx; border-radius: 24rpx;
+}
+.coupon-claim-btn:active { opacity: 0.85; }

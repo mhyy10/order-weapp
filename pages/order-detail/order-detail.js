@@ -34,7 +34,7 @@ Page({
   },
 
   onConfirmPickup() {
-    post(API.ORDER.CONFIRM, { id: this.data.order.id }).then(o => {
+    post(API.ORDER.COMPLETE, { id: this.data.order.id }).then(o => {
       wx.showToast({ title: '已确认取餐', icon: 'success' })
       this.loadOrder(this.data.order.id)
     })
@@ -46,5 +46,9 @@ Page({
     app.clearCart()
     items.forEach(item => app.addToCart(item))
     wx.switchTab({ url: '/pages/index/index' })
+  },
+
+  onReview() {
+    wx.navigateTo({ url: `/pages/review/review?orderId=${this.data.order.id}` })
   }
 })

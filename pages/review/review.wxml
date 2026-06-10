@@ -1,0 +1,38 @@
+<view class="page container fade-in">
+  <!-- 星级评分 -->
+  <view class="card">
+    <text class="card-title">评分</text>
+    <view class="stars">
+      <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{rating >= item ? 'active' : ''}}" bindtap="onStarTap" data-star="{{item}}">
+        {{rating >= item ? '★' : '☆'}}
+      </view>
+    </view>
+    <text class="rating-text">{{rating === 5 ? '非常满意' : rating === 4 ? '满意' : rating === 3 ? '一般' : rating === 2 ? '不满意' : '非常不满意'}}</text>
+  </view>
+
+  <!-- 快捷标签 -->
+  <view class="card">
+    <text class="card-title">标签</text>
+    <view class="tag-list">
+      <view wx:for="{{quickTags}}" wx:key="*this"
+        class="tag-item {{tags.indexOf(item) > -1 ? 'active' : ''}}"
+        bindtap="onTagTap" data-tag="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 文字评价 -->
+  <view class="card">
+    <text class="card-title">评价内容</text>
+    <textarea class="review-input" placeholder="分享你的用餐体验..." maxlength="200" value="{{content}}" bindinput="onInput" />
+    <text class="char-count">{{content.length}}/200</text>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-wrap safe-bottom">
+    <view class="btn-primary submit-btn {{submitting ? 'btn-disabled' : ''}}" bindtap="onSubmit">
+      {{submitting ? '提交中...' : '提交评价'}}
+    </view>
+  </view>
+</view>

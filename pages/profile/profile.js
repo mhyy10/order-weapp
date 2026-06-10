@@ -9,6 +9,7 @@ Page({
     menuItems: [
       { icon: '📋', title: '我的订单', url: '/pages/order-list/order-list' },
       { icon: '❤️', title: '我的收藏', url: '/pages/favorites/favorites' },
+      { icon: '🎫', title: '优惠券', url: '/pages/coupon/coupon' },
       { icon: '📣', title: '排队叫号', url: '/pages/queue/queue' },
       { icon: '⚙️', title: '设置', url: '/pages/settings/settings' }
     ]

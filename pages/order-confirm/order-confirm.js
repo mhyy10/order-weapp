@@ -1,4 +1,4 @@
-const { API, post } = require('../../utils/api')
+const { API, get, post } = require('../../utils/api')
 const { DISCOUNT_THRESHOLD, DISCOUNT_AMOUNT, SERVICE_FEE_PER_PERSON, MIN_PEOPLE_COUNT, DINE_TYPE } = require('../../utils/constants')
 const app = getApp()
 
@@ -10,6 +10,9 @@ Page({
     peopleCount: 2,
     subtotal: 0,
     discount: 0,
+    couponDiscount: 0,
+    selectedCoupon: null,
+    availableCoupons: [],
     total: 0,
     note: '',
     submitting: false
@@ -27,15 +30,43 @@ Page({
       total: subtotal - discount + serviceFee,
       tableNo: app.globalData.tableNo || ''
     })
+    this.loadCoupons()
+  },
+
+  loadCoupons() {
+    const userId = app.getUserId()
+    if (!userId) return
+    post(API.COUPON.APPLY, { userId, subtotal: this.data.subtotal }).then(coupons => {
+      const available = coupons.filter(c => c.canUse)
+      this.setData({ availableCoupons: available })
+    }).catch(() => {})
+  },
+
+  recalcTotal() {
+    const { subtotal, discount, couponDiscount, dineType, peopleCount } = this.data
+    const serviceFee = dineType === DINE_TYPE.DINE_IN ? peopleCount * SERVICE_FEE_PER_PERSON : 0
+    this.setData({ total: subtotal - discount - couponDiscount + serviceFee })
+  },
+
+  onSelectCoupon(e) {
+    const idx = e.currentTarget.dataset.idx
+    const coupon = this.data.availableCoupons[idx]
+    if (!coupon || !coupon.canUse) return
+
+    const selectedCoupon = this.data.selectedCoupon
+    // 再次点击取消选择
+    if (selectedCoupon && selectedCoupon.userCouponId === coupon.userCouponId) {
+      this.setData({ selectedCoupon: null, couponDiscount: 0 })
+    } else {
+      this.setData({ selectedCoupon: coupon, couponDiscount: coupon.discount })
+    }
+    this.recalcTotal()
   },
 
   onDineTypeChange(e) {
     const type = e.currentTarget.dataset.type
-    const serviceFee = type === DINE_TYPE.DINE_IN ? this.data.peopleCount * SERVICE_FEE_PER_PERSON : 0
-    this.setData({
-      dineType: type,
-      total: this.data.subtotal - this.data.discount + serviceFee
-    })
+    this.setData({ dineType: type })
+    this.recalcTotal()
   },
 
   onPeopleChange(e) {
@@ -43,11 +74,8 @@ Page({
     let count = this.data.peopleCount
     if (op === 'add') count++
     else if (op === 'minus' && count > MIN_PEOPLE_COUNT) count--
-    const serviceFee = this.data.dineType === DINE_TYPE.DINE_IN ? count * SERVICE_FEE_PER_PERSON : 0
-    this.setData({
-      peopleCount: count,
-      total: this.data.subtotal - this.data.discount + serviceFee
-    })
+    this.setData({ peopleCount: count })
+    this.recalcTotal()
   },
 
   onNoteInput(e) {
@@ -60,15 +88,20 @@ Page({
     this.setData({ submitting: true })
 
     const userId = app.getUserId()
-    // 注意：价格由后端重新计算，前端价格仅用于展示
-    post(API.ORDER.CREATE, {
+    const params = {
       userId,
       tableNo: this.data.tableNo,
       dineType: this.data.dineType,
       peopleCount: this.data.peopleCount,
       items: this.data.cartItems,
       note: this.data.note
-    }).then(order => {
+    }
+    // 附加优惠券
+    if (this.data.selectedCoupon) {
+      params.userCouponId = this.data.selectedCoupon.userCouponId
+    }
+
+    post(API.ORDER.CREATE, params).then(order => {
       app.clearCart()
       wx.showToast({ title: '下单成功', icon: 'success' })
       setTimeout(() => {

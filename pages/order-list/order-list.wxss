@@ -17,8 +17,20 @@
 .order-more { color: var(--text-light); }
 
 .order-footer { display: flex; justify-content: space-between; align-items: center; }
+.order-footer-right { display: flex; align-items: center; gap: 16rpx; }
 .order-time { font-size: 22rpx; color: var(--text-light); }
 .order-total { font-size: 32rpx; font-weight: 800; color: var(--price); }
+
+.review-tag {
+  font-size: 22rpx; font-weight: 600;
+  padding: 6rpx 18rpx; border-radius: 20rpx;
+  background: var(--primary); color: var(--text-white);
+}
+.review-tag:active { opacity: 0.85; }
+.review-tag.reviewed {
+  background: var(--bg-gray); color: var(--text-light);
+  font-weight: 400;
+}
 
 .load-more {
   display: flex; align-items: center; justify-content: center; gap: 12rpx;

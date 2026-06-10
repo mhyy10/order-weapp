@@ -40,6 +40,7 @@
       <view class="divider"></view>
       <view class="summary-row"><text class="label">小计</text><text>¥{{order.subtotal}}</text></view>
       <view class="summary-row" wx:if="{{order.discount > 0}}"><text class="label">优惠</text><text style="color:var(--success);">-¥{{order.discount}}</text></view>
+      <view class="summary-row" wx:if="{{order.couponDiscount > 0}}"><text class="label">优惠券</text><text style="color:var(--success);">-¥{{order.couponDiscount}}</text></view>
       <view class="divider"></view>
       <view class="summary-row total"><text style="font-weight:600;">合计</text><text class="total-price">¥{{order.total}}</text></view>
     </view>
@@ -47,8 +48,10 @@
     <!-- Actions -->
     <view class="actions">
       <view wx:if="{{order.status === 'pending'}}" class="btn-outline action-btn" bindtap="onCancel">取消订单</view>
+      <view wx:if="{{order.status === 'confirmed'}}" class="btn-outline action-btn" style="border-color:var(--primary);color:var(--primary);">制作中，请稍候</view>
       <view wx:if="{{order.status === 'ready'}}" class="btn-primary action-btn" bindtap="onConfirmPickup">确认取餐</view>
-      <view wx:if="{{order.status === 'completed' || order.status === 'cancelled'}}" class="btn-primary action-btn" bindtap="onReorder">再来一单</view>
+      <view wx:if="{{order.status === 'completed'}}" class="btn-primary action-btn" bindtap="onReview">📝 评价</view>
+      <view wx:if="{{order.status === 'completed' || order.status === 'cancelled'}}" class="btn-outline action-btn" bindtap="onReorder">再来一单</view>
     </view>
   </view>
 </view>

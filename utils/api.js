@@ -21,7 +21,10 @@ const API = {
     LIST: `${API_BASE}/order/list`,
     DETAIL: `${API_BASE}/order/detail`,
     CANCEL: `${API_BASE}/order/cancel`,
-    CONFIRM: `${API_BASE}/order/confirm`
+    CONFIRM: `${API_BASE}/order/confirm`,
+    ACCEPT: `${API_BASE}/order/accept`,
+    READY: `${API_BASE}/order/ready`,
+    COMPLETE: `${API_BASE}/order/complete`
   },
   USER: {
     LOGIN: `${API_BASE}/user/login`,
@@ -33,6 +36,17 @@ const API = {
     JOIN: `${API_BASE}/queue/join`,
     STATUS: `${API_BASE}/queue/status`,
     CANCEL: `${API_BASE}/queue/cancel`
+  },
+  COUPON: {
+    LIST: `${API_BASE}/coupon/list`,
+    MY: `${API_BASE}/coupon/my`,
+    CLAIM: `${API_BASE}/coupon/claim`,
+    APPLY: `${API_BASE}/coupon/apply`
+  },
+  REVIEW: {
+    CREATE: `${API_BASE}/review/create`,
+    LIST: `${API_BASE}/review/list`,
+    BY_ORDER: `${API_BASE}/review/by-order`
   }
 }
 
