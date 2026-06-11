@@ -1,0 +1,58 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page">
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="address-card fade-in">
+      <view class="address-top">
+        <view class="skeleton" style="width:120rpx;height:36rpx;"></view>
+        <view class="skeleton" style="width:180rpx;height:32rpx;margin-left:20rpx;"></view>
+      </view>
+      <view class="skeleton skeleton-text" style="width:80%;margin-top:16rpx;"></view>
+      <view class="skeleton skeleton-text-sm" style="width:50%;margin-top:12rpx;"></view>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <block wx:elif="{{addresses.length === 0}}">
+    <view class="empty fade-in">
+      <text class="empty-icon">📍</text>
+      <text class="empty-text">暂无收货地址</text>
+      <text class="empty-hint">添加一个收货地址方便外卖配送</text>
+      <view class="btn-primary" style="margin-top:32rpx;" bindtap="onAdd">去添加</view>
+    </view>
+  </block>
+
+  <!-- 地址列表 -->
+  <block wx:else>
+    <view class="address-list">
+      <view wx:for="{{addresses}}" wx:key="id" class="address-card fade-in" bindtap="onSelect" data-id="{{item.id}}" bindlongpress="onLongPress" data-id="{{item.id}}">
+        <view class="address-top">
+          <text class="address-name">{{item.name}}</text>
+          <text class="address-phone">{{item.phone}}</text>
+          <view wx:if="{{item.isDefault}}" class="address-default-tag">默认</view>
+        </view>
+        <text class="address-detail">{{item.province}}{{item.city}}{{item.district}} {{item.detail}}</text>
+        <view class="address-actions">
+          <view class="action-btn" catchtap="onSetDefault" data-id="{{item.id}}" wx:if="{{!item.isDefault}}">
+            <text class="action-icon">⭐</text>
+            <text class="action-text">设为默认</text>
+          </view>
+          <view class="action-btn" catchtap="onEdit" data-id="{{item.id}}">
+            <text class="action-icon">✏️</text>
+            <text class="action-text">编辑</text>
+          </view>
+          <view class="action-btn action-btn-danger" catchtap="onDelete" data-id="{{item.id}}">
+            <text class="action-icon">🗑️</text>
+            <text class="action-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 底部新增按钮 -->
+  <view class="bottom-bar safe-bottom">
+    <view class="btn-primary add-btn" bindtap="onAdd">+ 新增收货地址</view>
+  </view>
+</view>

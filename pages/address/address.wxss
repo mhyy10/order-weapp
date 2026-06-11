@@ -1,0 +1,89 @@
+.page { background: var(--bg); min-height: 100vh; padding-bottom: 160rpx; }
+
+.address-list { padding: 16rpx 24rpx; }
+
+.address-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 28rpx 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.address-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.address-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin-right: 20rpx;
+}
+
+.address-phone {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.address-default-tag {
+  margin-left: 16rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-bg);
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
+}
+
+.address-detail {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.address-actions {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--divider);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.action-icon {
+  font-size: 26rpx;
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.action-btn-danger .action-text {
+  color: var(--danger);
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx;
+  background: var(--bg-white);
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+}
+
+.add-btn {
+  width: 100%;
+  text-align: center;
+  padding: 28rpx 0;
+}

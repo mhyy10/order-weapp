@@ -1,0 +1,87 @@
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page">
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="points-header fade-in">
+      <view class="skeleton" style="width:120rpx;height:72rpx;margin:0 auto 12rpx;"></view>
+      <view class="skeleton skeleton-text-sm" style="width:80rpx;margin:0 auto;"></view>
+      <view class="header-stats">
+        <view class="stat-box">
+          <view class="skeleton" style="width:60rpx;height:36rpx;margin:0 auto 8rpx;"></view>
+          <view class="skeleton skeleton-text-sm" style="width:50rpx;margin:0 auto;"></view>
+        </view>
+        <view class="stat-box">
+          <view class="skeleton" style="width:60rpx;height:36rpx;margin:0 auto 8rpx;"></view>
+          <view class="skeleton skeleton-text-sm" style="width:50rpx;margin:0 auto;"></view>
+        </view>
+      </view>
+    </view>
+    <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="record-card fade-in">
+      <view class="record-left">
+        <view class="skeleton" style="width:48rpx;height:48rpx;border-radius:50%;"></view>
+        <view style="flex:1;margin-left:20rpx;">
+          <view class="skeleton skeleton-text" style="width:50%;"></view>
+          <view class="skeleton skeleton-text-sm" style="width:30%;margin-top:8rpx;"></view>
+        </view>
+      </view>
+      <view class="skeleton" style="width:80rpx;height:36rpx;"></view>
+    </view>
+  </block>
+
+  <!-- 正常内容 -->
+  <block wx:else>
+    <!-- 积分头部卡片 -->
+    <view class="points-header fade-in">
+      <text class="points-balance">{{balance}}</text>
+      <text class="points-label">当前积分</text>
+      <view class="header-stats">
+        <view class="stat-box">
+          <text class="stat-num">{{totalEarned}}</text>
+          <text class="stat-desc">累计获取</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-box">
+          <text class="stat-num">{{totalSpent}}</text>
+          <text class="stat-desc">累计消费</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 积分明细 -->
+    <view class="section-title">积分明细</view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{records.length === 0}}" class="empty fade-in" style="padding:80rpx 48rpx;">
+      <text class="empty-icon">💎</text>
+      <text class="empty-text">暂无积分记录</text>
+      <text class="empty-hint">消费即可获取积分</text>
+    </view>
+
+    <!-- 记录列表 -->
+    <view wx:else class="record-list">
+      <view wx:for="{{records}}" wx:key="id" class="record-card fade-in">
+        <view class="record-left">
+          <view class="record-icon {{item.type === 'earn' ? 'icon-earn' : 'icon-spend'}}">
+            <text>{{item.type === 'earn' ? '↑' : '↓'}}</text>
+          </view>
+          <view class="record-info">
+            <text class="record-desc">{{item.description}}</text>
+            <text class="record-time">{{item.createdAt}}</text>
+          </view>
+        </view>
+        <text class="record-amount {{item.type === 'earn' ? 'amount-earn' : 'amount-spend'}}">
+          {{item.type === 'earn' ? '+' : ''}}{{item.points}}
+        </text>
+      </view>
+
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore}}" class="load-more" bindtap="onLoadMore">
+        <text class="load-more-text">上拉加载更多</text>
+      </view>
+      <view wx:elif="{{records.length > 0}}" class="load-more">
+        <text class="load-more-text">没有更多了</text>
+      </view>
+    </view>
+  </block>
+</view>

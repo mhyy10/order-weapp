@@ -13,7 +13,10 @@
     "pages/settings/settings",
     "pages/search/search",
     "pages/coupon/coupon",
-    "pages/review/review"
+    "pages/review/review",
+    "pages/address/address",
+    "pages/address-edit/address-edit",
+    "pages/points/points"
   ],
   "window": {
     "navigationBarBackgroundColor": "#FF6B35",

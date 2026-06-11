@@ -1,0 +1,89 @@
+.page { background: var(--bg); min-height: 100vh; padding-bottom: 160rpx; }
+
+.form-card {
+  margin: 24rpx;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 0 24rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-item-textarea {
+  align-items: flex-start;
+}
+
+.form-item-switch {
+  justify-content: space-between;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text);
+  text-align: right;
+}
+
+.form-textarea {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text);
+  height: 160rpx;
+  background: var(--bg-gray);
+  border-radius: var(--radius-sm);
+  padding: 16rpx;
+  margin-top: 8rpx;
+  width: auto;
+}
+
+.form-region {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text);
+  text-align: right;
+}
+
+.form-region.placeholder {
+  color: var(--text-light);
+}
+
+.form-arrow {
+  font-size: 32rpx;
+  color: var(--text-light);
+  margin-left: 12rpx;
+  font-weight: 300;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 32rpx;
+  background: var(--bg-white);
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+}
+
+.save-btn {
+  width: 100%;
+  text-align: center;
+  padding: 28rpx 0;
+}

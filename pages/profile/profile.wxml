@@ -24,9 +24,13 @@
         <view class="skeleton" style="width:60rpx;height:40rpx;margin:0 auto 8rpx;"></view>
         <view class="skeleton skeleton-text-sm" style="width:50rpx;margin:0 auto;"></view>
       </view>
+      <view class="stat-item">
+        <view class="skeleton" style="width:60rpx;height:40rpx;margin:0 auto 8rpx;"></view>
+        <view class="skeleton skeleton-text-sm" style="width:50rpx;margin:0 auto;"></view>
+      </view>
     </view>
     <view class="card menu-card fade-in" style="margin:16rpx 24rpx;">
-      <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" style="display:flex;align-items:center;padding:30rpx 0;border-bottom:1rpx solid var(--divider);">
+      <view wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this" style="display:flex;align-items:center;padding:30rpx 0;border-bottom:1rpx solid var(--divider);">
         <view class="skeleton" style="width:36rpx;height:36rpx;border-radius:8rpx;margin-right:20rpx;"></view>
         <view class="skeleton skeleton-text" style="width:40%;"></view>
       </view>
@@ -54,8 +58,8 @@
         <text class="stat-label">收藏</text>
       </view>
       <view class="stat-item">
-        <text class="stat-num">-</text>
-        <text class="stat-label">排队</text>
+        <text class="stat-num">0</text>
+        <text class="stat-label">积分</text>
       </view>
     </view>
     <view class="empty" style="padding:80rpx 48rpx;">
@@ -89,10 +93,10 @@
         <text class="stat-num">{{favCount}}</text>
         <text class="stat-label">收藏</text>
       </navigator>
-      <navigator url="/pages/queue/queue" class="stat-item">
-        <text class="stat-num">-</text>
-        <text class="stat-label">排队</text>
-      </navigator>
+      <view class="stat-item" bindtap="onPointsTap">
+        <text class="stat-num stat-num-points">{{pointsBalance}}</text>
+        <text class="stat-label">积分</text>
+      </view>
     </view>
 
     <!-- Scan table -->

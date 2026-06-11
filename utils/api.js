@@ -47,6 +47,17 @@ const API = {
     CREATE: `${API_BASE}/review/create`,
     LIST: `${API_BASE}/review/list`,
     BY_ORDER: `${API_BASE}/review/by-order`
+  },
+  ADDRESS: {
+    LIST: `${API_BASE}/address/list`,
+    ADD: `${API_BASE}/address/add`,
+    UPDATE: `${API_BASE}/address/update`,
+    DELETE: `${API_BASE}/address/delete`,
+    SET_DEFAULT: `${API_BASE}/address/setDefault`
+  },
+  POINTS: {
+    BALANCE: `${API_BASE}/points/balance`,
+    RECORDS: `${API_BASE}/points/records`
   }
 }
 

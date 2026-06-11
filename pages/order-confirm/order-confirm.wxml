@@ -58,6 +58,26 @@
       </view>
     </view>
 
+    <!-- 配送地址 -->
+    <view class="card" wx:if="{{dineType === 'takeaway'}}">
+      <text class="card-title">配送地址</text>
+      <view wx:if="{{selectedAddress}}" class="address-selected" bindtap="onChooseAddress">
+        <view class="address-info">
+          <view class="address-top-row">
+            <text class="address-name">{{selectedAddress.name}}</text>
+            <text class="address-phone">{{selectedAddress.phone}}</text>
+          </view>
+          <text class="address-detail-text">{{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}} {{selectedAddress.detail}}</text>
+        </view>
+        <text class="address-arrow">›</text>
+      </view>
+      <view wx:else class="address-empty" bindtap="onChooseAddress">
+        <text class="address-empty-icon">📍</text>
+        <text class="address-empty-text">请选择收货地址</text>
+        <text class="address-arrow">›</text>
+      </view>
+    </view>
+
     <!-- Order items -->
     <view class="card">
       <text class="card-title">已选菜品</text>
@@ -84,6 +104,10 @@
       <view class="summary-row" wx:if="{{couponDiscount > 0}}">
         <text class="label" style="color:var(--success);">优惠券</text>
         <text style="color:var(--success);">-¥{{couponDiscount}}</text>
+      </view>
+      <view class="summary-row" wx:if="{{pointsDeduction > 0}}">
+        <text class="label" style="color:var(--success);">积分抵扣</text>
+        <text style="color:var(--success);">-¥{{pointsDeduction}}</text>
       </view>
       <view class="summary-row" wx:if="{{dineType === 'dine_in'}}">
         <text class="label">餐位费</text>
@@ -114,6 +138,27 @@
       <view wx:if="{{availableCoupons.length === 0}}" class="no-coupon">
         <text class="no-coupon-text">暂无可用优惠券</text>
         <navigator url="/pages/coupon/coupon" class="no-coupon-link">去领券</navigator>
+      </view>
+    </view>
+
+    <!-- 积分抵扣 -->
+    <view class="card" wx:if="{{pointsBalance > 0}}">
+      <text class="card-title">积分抵扣</text>
+      <view class="points-row">
+        <view class="points-info">
+          <text class="points-balance-text">可用积分：{{pointsBalance}}</text>
+          <text class="points-rate">100积分=1元</text>
+        </view>
+        <switch checked="{{usePoints}}" bindchange="onUsePointsChange" color="var(--primary)" />
+      </view>
+      <view wx:if="{{usePoints}}" class="points-input-row">
+        <text class="points-input-label">使用积分</text>
+        <input class="points-input" type="number" placeholder="0" value="{{pointsToUse}}" bindinput="onPointsInput" />
+        <text class="points-max-hint">最多{{maxPoints}}积分（抵¥{{maxPointsDeduction}}）</text>
+      </view>
+      <view wx:if="{{usePoints && pointsDeduction > 0}}" class="points-deduction-row">
+        <text class="points-deduction-label">可抵扣</text>
+        <text class="points-deduction-amount">¥{{pointsDeduction}}</text>
       </view>
     </view>
 
