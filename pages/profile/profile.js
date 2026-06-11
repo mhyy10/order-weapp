@@ -6,6 +6,7 @@ Page({
     userInfo: null,
     orderCount: 0,
     favCount: 0,
+    loading: true,
     menuItems: [
       { icon: '📋', title: '我的订单', url: '/pages/order-list/order-list' },
       { icon: '❤️', title: '我的收藏', url: '/pages/favorites/favorites' },
@@ -25,11 +26,17 @@ Page({
   },
 
   loadUserInfo() {
+    this.setData({ loading: true })
     const userId = app.getUserId()
-    if (!userId) return
+    if (!userId) {
+      this.setData({ loading: false })
+      return
+    }
     get(API.USER.INFO, { userId }).then(data => {
-      this.setData({ userInfo: data })
-    }).catch(() => {})
+      this.setData({ userInfo: data, loading: false })
+    }).catch(() => {
+      this.setData({ loading: false })
+    })
   },
 
   loadStats() {
@@ -65,5 +72,11 @@ Page({
         }
       }
     })
+  },
+
+  onPullDownRefresh() {
+    this.loadUserInfo()
+    this.loadStats()
+    wx.stopPullDownRefresh()
   }
 })

@@ -13,7 +13,7 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 20rpx 32rpx;
   background: var(--bg-white);
-  box-shadow: 0 -4rpx 16rpx rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-md);
 }
 .bottom-total-wrap { display: flex; flex-direction: column; }
 .bottom-total-label { font-size: 22rpx; color: var(--text-light); }

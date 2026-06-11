@@ -6,7 +6,13 @@ Page({
       { title: '清除缓存', action: 'clearCache' },
       { title: '关于我们', action: 'about' },
       { title: '版本', value: 'v1.0.0' }
-    ]
+    ],
+    loading: true
+  },
+
+  onLoad() {
+    // 模拟短暂加载，确保骨架屏可见
+    this.setData({ loading: false })
   },
 
   onTap(e) {
@@ -31,5 +37,13 @@ Page({
     } else if (action === 'about') {
       wx.showModal({ title: '关于小灶', content: '小灶点餐 v1.0.0\n让点餐更简单', showCancel: false })
     }
+  },
+
+  onPullDownRefresh() {
+    this.setData({ loading: true })
+    setTimeout(() => {
+      this.setData({ loading: false })
+      wx.stopPullDownRefresh()
+    }, 300)
   }
 })

@@ -1,16 +1,22 @@
 const app = getApp()
 
 Page({
-  data: { cartItems: [], total: 0, count: 0 },
+  data: { cartItems: [], total: 0, count: 0, loading: true },
+
+  onLoad() {
+    this.syncCart()
+  },
 
   onShow() { this.syncCart() },
 
   syncCart() {
+    this.setData({ loading: true })
     const cartItems = app.globalData.cartItems || []
     this.setData({
       cartItems,
       total: app.getCartTotal(),
-      count: app.getCartCount()
+      count: app.getCartCount(),
+      loading: false
     })
   },
 
@@ -36,5 +42,10 @@ Page({
   onCheckout() {
     if (this.data.count === 0) return
     wx.navigateTo({ url: '/pages/order-confirm/order-confirm' })
+  },
+
+  onPullDownRefresh() {
+    this.syncCart()
+    wx.stopPullDownRefresh()
   }
 })

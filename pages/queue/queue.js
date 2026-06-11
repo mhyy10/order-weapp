@@ -2,15 +2,21 @@ const { API, get, post } = require('../../utils/api')
 const app = getApp()
 
 Page({
-  data: { queueInfo: null, showJoin: false, peopleCount: 2, phone: '' },
+  data: { queueInfo: null, showJoin: false, peopleCount: 2, phone: '', loading: true },
 
   onLoad() { this.loadQueue() },
 
   loadQueue() {
+    this.setData({ loading: true })
     const userId = app.getUserId()
-    if (!userId) return
+    if (!userId) {
+      this.setData({ loading: false })
+      return
+    }
     get(API.QUEUE.STATUS, { userId }).then(info => {
-      this.setData({ queueInfo: info })
+      this.setData({ queueInfo: info, loading: false })
+    }).catch(() => {
+      this.setData({ loading: false })
     })
   },
 
@@ -48,5 +54,10 @@ Page({
         }
       }
     })
+  },
+
+  onPullDownRefresh() {
+    this.loadQueue()
+    wx.stopPullDownRefresh()
   }
 })

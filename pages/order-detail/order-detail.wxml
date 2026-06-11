@@ -1,8 +1,37 @@
 <wxs src="../../utils/filters.wxs" module="f" />
 <view class="page container">
-  <view wx:if="{{loading}}" class="flex-center" style="padding:120rpx 0;">
-    <view class="loading-spinner"></view>
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="status-card card fade-in" style="text-align:center;">
+      <view class="skeleton" style="width:96rpx;height:96rpx;border-radius:50%;margin:0 auto 16rpx;"></view>
+      <view class="skeleton skeleton-text" style="width:30%;margin:0 auto 12rpx;"></view>
+      <view class="skeleton skeleton-text-sm" style="width:50%;margin:0 auto 6rpx;"></view>
+      <view class="skeleton skeleton-text-sm" style="width:40%;margin:0 auto;"></view>
+    </view>
+    <view class="card fade-in">
+      <view class="skeleton skeleton-text" style="width:25%;margin-bottom:16rpx;"></view>
+      <view wx:for="{{[1,2,3]}}" wx:key="*this" style="display:flex;justify-content:space-between;align-items:center;padding:14rpx 0;border-bottom:1rpx solid var(--divider);">
+        <view class="skeleton skeleton-text" style="width:40%"></view>
+        <view class="skeleton skeleton-text-sm" style="width:20%"></view>
+      </view>
+    </view>
+    <view class="card fade-in">
+      <view wx:for="{{[1,2,3]}}" wx:key="*this" style="display:flex;justify-content:space-between;padding:12rpx 0;">
+        <view class="skeleton skeleton-text-sm" style="width:25%"></view>
+        <view class="skeleton skeleton-text-sm" style="width:20%"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 空状态：订单不存在 -->
+  <view wx:elif="{{!order}}" class="empty fade-in">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">订单不存在</text>
+    <text class="empty-hint">该订单可能已被删除</text>
+    <navigator url="/pages/index/index" open-type="switchTab" class="btn-primary" style="margin-top:32rpx;">回首页</navigator>
   </view>
+
+  <!-- 实际内容 -->
   <view wx:elif="{{order}}" class="fade-in">
     <!-- Status -->
     <view class="status-card card">

@@ -1,9 +1,27 @@
-<view class="page container fade-in">
-  <view class="card menu-card">
-    <view wx:for="{{settings}}" wx:key="title" class="menu-item" bindtap="onTap" data-action="{{item.action}}">
-      <text class="menu-title">{{item.title}}</text>
-      <text class="menu-value">{{item.value || ''}}</text>
-      <text class="menu-arrow" wx:if="{{item.action}}">›</text>
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page container">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="card menu-card fade-in">
+      <view wx:for="{{[1,2,3]}}" wx:key="*this" style="display:flex;align-items:center;padding:30rpx 0;border-bottom:1rpx solid var(--divider);">
+        <view class="skeleton skeleton-text" style="width:40%;flex:1;"></view>
+        <view class="skeleton skeleton-text-sm" style="width:15%;margin-right:12rpx;"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 实际内容 -->
+  <view wx:else class="fade-in">
+    <view wx:if="{{settings.length === 0}}" class="empty">
+      <text class="empty-icon">⚙️</text>
+      <text class="empty-text">暂无设置项</text>
+    </view>
+    <view wx:else class="card menu-card">
+      <view wx:for="{{settings}}" wx:key="title" class="menu-item" bindtap="onTap" data-action="{{item.action}}">
+        <text class="menu-title">{{item.title}}</text>
+        <text class="menu-value">{{item.value || ''}}</text>
+        <text class="menu-arrow" wx:if="{{item.action}}">›</text>
+      </view>
     </view>
   </view>
 </view>

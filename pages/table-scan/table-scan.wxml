@@ -1,18 +1,43 @@
-<view class="page fade-in">
-  <view class="scan-area">
-    <view class="scan-frame">
-      <view class="scan-corners">
-        <view class="corner corner-tl"></view>
-        <view class="corner corner-tr"></view>
-        <view class="corner corner-bl"></view>
-        <view class="corner corner-br"></view>
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="scan-area fade-in">
+      <view class="scan-frame" style="background:var(--bg-gray);">
+        <view class="skeleton" style="width:300rpx;height:300rpx;border-radius:var(--radius-lg);"></view>
       </view>
-      <view class="scan-line"></view>
-      <text class="scan-tip">{{scanning ? '扫描中...' : '将桌号二维码放入框内'}}</text>
+      <view style="width:400rpx;text-align:center;margin-top:40rpx;">
+        <view class="skeleton" style="width:200rpx;height:48rpx;margin:0 auto 24rpx;border-radius:44rpx;"></view>
+        <view class="skeleton" style="width:200rpx;height:48rpx;margin:0 auto;border-radius:44rpx;"></view>
+      </view>
     </view>
-    <view class="scan-actions">
-      <view class="btn-primary" bindtap="startScan">📷 扫码</view>
-      <view class="btn-outline" style="margin-top:24rpx;" bindtap="onManualInput">⌨️ 手动输入</view>
+  </block>
+
+  <!-- 空状态：扫码失败/不可用 -->
+  <view wx:elif="{{scanError}}" class="empty fade-in" style="padding-top:200rpx;">
+    <text class="empty-icon">📷</text>
+    <text class="empty-text">扫码功能不可用</text>
+    <text class="empty-hint">请尝试手动输入桌号</text>
+    <view class="btn-outline" style="margin-top:32rpx;" bindtap="onManualInput">⌨️ 手动输入桌号</view>
+  </view>
+
+  <!-- 实际内容 -->
+  <view wx:else class="fade-in">
+    <view class="scan-area">
+      <view class="scan-frame">
+        <view class="scan-corners">
+          <view class="corner corner-tl"></view>
+          <view class="corner corner-tr"></view>
+          <view class="corner corner-bl"></view>
+          <view class="corner corner-br"></view>
+        </view>
+        <view class="scan-line"></view>
+        <text class="scan-tip">{{scanning ? '扫描中...' : '将桌号二维码放入框内'}}</text>
+      </view>
+      <view class="scan-actions">
+        <view class="btn-primary" bindtap="startScan">📷 扫码</view>
+        <view class="btn-outline" style="margin-top:24rpx;" bindtap="onManualInput">⌨️ 手动输入</view>
+      </view>
     </view>
   </view>
 </view>

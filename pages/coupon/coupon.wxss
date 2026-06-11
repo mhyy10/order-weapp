@@ -32,8 +32,8 @@
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: var(--text-white);
 }
-.coupon-left.disabled { background: #ccc; }
-.coupon-left.highlight { background: linear-gradient(135deg, #FF4D4F, #FF7875); }
+.coupon-left.disabled { background: var(--text-light); }
+.coupon-left.highlight { background: linear-gradient(135deg, var(--danger), var(--danger-light)); }
 
 .coupon-value { font-size: 48rpx; font-weight: 900; line-height: 1.1; }
 .coupon-threshold { font-size: 20rpx; opacity: 0.8; margin-top: 4rpx; }
@@ -51,7 +51,7 @@
   position: absolute; top: 16rpx; right: 16rpx;
   font-size: 20rpx; padding: 4rpx 12rpx; border-radius: 16rpx;
 }
-.coupon-status.available { background: #FFF0E6; color: var(--primary); }
+.coupon-status.available { background: var(--primary-bg); color: var(--primary); }
 .coupon-status.used { background: var(--bg-gray); color: var(--text-light); }
 .coupon-status.expired { background: var(--bg-gray); color: var(--text-light); }
 

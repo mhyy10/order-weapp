@@ -10,7 +10,8 @@ Page({
     content: '',
     tags: [],
     quickTags: QUICK_TAGS,
-    submitting: false
+    submitting: false,
+    loading: true
   },
 
   onLoad(e) {
@@ -19,7 +20,7 @@ Page({
       setTimeout(() => wx.navigateBack(), 1500)
       return
     }
-    this.setData({ orderId: e.orderId })
+    this.setData({ orderId: e.orderId, loading: false })
   },
 
   onStarTap(e) {
@@ -57,5 +58,9 @@ Page({
     }).catch(() => {
       this.setData({ submitting: false })
     })
+  },
+
+  onPullDownRefresh() {
+    wx.stopPullDownRefresh()
   }
 })

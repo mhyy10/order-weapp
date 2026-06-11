@@ -5,7 +5,7 @@
   font-size: 56rpx; color: var(--divider);
   transition: transform 0.15s, color 0.15s;
 }
-.star.active { color: #FFB800; }
+.star.active { color: var(--star); }
 .star:active { transform: scale(1.2); }
 
 .rating-text { display: block; text-align: center; font-size: 28rpx; color: var(--text-secondary); margin-top: 8rpx; }
@@ -41,6 +41,6 @@
   position: fixed; bottom: 0; left: 0; right: 0;
   padding: 20rpx 32rpx;
   background: var(--bg-white);
-  box-shadow: 0 -4rpx 16rpx rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-md);
 }
 .submit-btn { width: 100%; text-align: center; padding: 28rpx 0; }

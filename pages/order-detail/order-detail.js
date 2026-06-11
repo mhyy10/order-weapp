@@ -9,6 +9,7 @@ Page({
   },
 
   loadOrder(id) {
+    this.setData({ loading: true })
     get(API.ORDER.DETAIL, { id }).then(order => {
       order.statusText = getStatusText(order.status)
       order.statusColor = getStatusColor(order.status)
@@ -50,5 +51,12 @@ Page({
 
   onReview() {
     wx.navigateTo({ url: `/pages/review/review?orderId=${this.data.order.id}` })
+  },
+
+  onPullDownRefresh() {
+    if (this.data.order) {
+      this.loadOrder(this.data.order.id)
+    }
+    wx.stopPullDownRefresh()
   }
 })

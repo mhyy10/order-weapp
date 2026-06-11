@@ -1,5 +1,27 @@
+<wxs src="../../utils/filters.wxs" module="f" />
 <view class="page container">
-  <view wx:if="{{queueInfo}}" class="queue-card card fade-in">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="queue-card card fade-in">
+      <view class="skeleton" style="width:240rpx;height:80rpx;margin:0 auto 16rpx;border-radius:var(--radius-lg);"></view>
+      <view class="skeleton skeleton-text" style="width:40%;margin:0 auto 36rpx;"></view>
+      <view style="display:flex;justify-content:center;align-items:center;gap:0;margin-bottom:28rpx;">
+        <view style="flex:1;text-align:center;">
+          <view class="skeleton" style="width:60rpx;height:44rpx;margin:0 auto 6rpx;"></view>
+          <view class="skeleton skeleton-text-sm" style="width:80rpx;margin:0 auto;"></view>
+        </view>
+        <view style="width:1rpx;height:60rpx;background:var(--divider);"></view>
+        <view style="flex:1;text-align:center;">
+          <view class="skeleton" style="width:60rpx;height:44rpx;margin:0 auto 6rpx;"></view>
+          <view class="skeleton skeleton-text-sm" style="width:80rpx;margin:0 auto;"></view>
+        </view>
+      </view>
+      <view class="skeleton" style="width:160rpx;height:48rpx;margin:0 auto;border-radius:28rpx;"></view>
+    </view>
+  </block>
+
+  <!-- 排队中 -->
+  <view wx:elif="{{queueInfo}}" class="queue-card card fade-in">
     <view class="queue-no-wrap">
       <text class="queue-no">{{queueInfo.queueNo}}</text>
     </view>
@@ -22,6 +44,7 @@
     <view class="btn-outline" style="margin-top:40rpx;" bindtap="onCancelQueue">取消排队</view>
   </view>
 
+  <!-- 空状态：未排队 -->
   <view wx:else class="empty fade-in">
     <text class="empty-icon">📣</text>
     <text class="empty-text">您还没有排队</text>

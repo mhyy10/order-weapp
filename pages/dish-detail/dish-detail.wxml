@@ -1,8 +1,37 @@
 <wxs src="../../utils/filters.wxs" module="f" />
 <view class="page">
-  <view wx:if="{{loading}}" class="flex-center" style="padding:200rpx 0;">
-    <view class="loading-spinner"></view>
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="skeleton" style="width:100%;height:500rpx;"></view>
+    <view class="info-card fade-in">
+      <view style="display:flex;align-items:center;gap:12rpx;margin-bottom:10rpx;">
+        <view class="skeleton skeleton-text" style="width:40%;"></view>
+      </view>
+      <view class="skeleton skeleton-text-sm" style="width:80%;margin-bottom:10rpx;"></view>
+      <view class="skeleton skeleton-text-sm" style="width:50%;margin-bottom:20rpx;"></view>
+      <view style="display:flex;align-items:baseline;gap:4rpx;">
+        <view class="skeleton" style="width:24rpx;height:24rpx;"></view>
+        <view class="skeleton" style="width:120rpx;height:48rpx;"></view>
+      </view>
+    </view>
+    <view class="info-card fade-in">
+      <view class="skeleton skeleton-text" style="width:20%;margin-bottom:16rpx;"></view>
+      <view style="display:flex;flex-wrap:wrap;gap:12rpx;">
+        <view class="skeleton" style="width:120rpx;height:44rpx;border-radius:28rpx;"></view>
+        <view class="skeleton" style="width:120rpx;height:44rpx;border-radius:28rpx;"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 空状态：菜品不存在 -->
+  <view wx:elif="{{!dish}}" class="empty fade-in">
+    <text class="empty-icon">🍽️</text>
+    <text class="empty-text">菜品不存在</text>
+    <text class="empty-hint">该菜品可能已下架</text>
+    <navigator url="/pages/index/index" open-type="switchTab" class="btn-primary" style="margin-top:32rpx;">回首页</navigator>
   </view>
+
+  <!-- 实际内容 -->
   <view wx:elif="{{dish}}" class="fade-in">
     <!-- Hero image -->
     <view class="hero">

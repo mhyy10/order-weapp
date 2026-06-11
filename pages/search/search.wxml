@@ -6,32 +6,50 @@
     <text wx:if="{{keyword}}" class="search-clear" bindtap="onClear">×</text>
   </view>
 
-  <!-- 搜索中 -->
-  <view wx:if="{{keyword && !searched}}" class="search-loading">
-    <view class="loading-spinner"></view>
-    <text class="search-loading-text">搜索中...</text>
-  </view>
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="dish-card fade-in">
+      <view class="skeleton" style="width:160rpx;height:160rpx;border-radius:var(--radius-sm);flex-shrink:0;"></view>
+      <view style="flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+        <view class="skeleton skeleton-text" style="width:50%"></view>
+        <view class="skeleton skeleton-text-sm" style="width:80%"></view>
+        <view style="display:flex;justify-content:space-between;align-items:center;">
+          <view class="skeleton" style="width:80rpx;height:28rpx;"></view>
+          <view class="skeleton" style="width:48rpx;height:48rpx;border-radius:50%;"></view>
+        </view>
+      </view>
+    </view>
+  </block>
 
   <!-- 空结果 -->
-  <view wx:if="{{searched && results.length === 0}}" class="empty">
+  <view wx:elif="{{searched && results.length === 0}}" class="empty fade-in">
     <text class="empty-icon">🔍</text>
     <text class="empty-text">未找到"{{keyword}}"相关菜品</text>
     <text class="empty-hint">换个关键词试试</text>
   </view>
 
   <!-- 搜索结果 -->
-  <view wx:for="{{results}}" wx:key="id" class="dish-card" bindtap="onDishTap" data-id="{{item.id}}">
-    <image class="dish-image" src="{{item.image || '/assets/icons/menu.png'}}" mode="aspectFill" lazy-load />
-    <view class="dish-info">
-      <text class="dish-name">{{item.name}}</text>
-      <text class="dish-desc">{{item.description}}</text>
-      <view class="dish-bottom">
-        <view class="price-wrap">
-          <text class="price-symbol">¥</text>
-          <text class="price-value">{{item.price}}</text>
+  <block wx:elif="{{searched && results.length > 0}}">
+    <view wx:for="{{results}}" wx:key="id" class="dish-card" bindtap="onDishTap" data-id="{{item.id}}">
+      <image class="dish-image" src="{{item.image || '/assets/icons/menu.png'}}" mode="aspectFill" lazy-load />
+      <view class="dish-info">
+        <text class="dish-name">{{item.name}}</text>
+        <text class="dish-desc">{{item.description}}</text>
+        <view class="dish-bottom">
+          <view class="price-wrap">
+            <text class="price-symbol">¥</text>
+            <text class="price-value">{{item.price}}</text>
+          </view>
+          <view class="btn-add" catchtap="onQuickAdd" data-dish="{{item}}">+</view>
         </view>
-        <view class="btn-add" catchtap="onQuickAdd" data-dish="{{item}}">+</view>
       </view>
     </view>
+  </block>
+
+  <!-- 默认状态：未搜索 -->
+  <view wx:else class="empty" style="padding-top:160rpx;">
+    <text class="empty-icon">🍽️</text>
+    <text class="empty-text">搜索你想吃的</text>
+    <text class="empty-hint">输入菜品名称开始搜索</text>
   </view>
 </view>

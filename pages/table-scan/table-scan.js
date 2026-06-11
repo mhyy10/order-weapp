@@ -1,8 +1,9 @@
 Page({
-  data: { scanning: false },
+  data: { scanning: false, loading: true, scanError: false },
 
   onLoad() {
-    this.startScan()
+    // 页面加载完成
+    this.setData({ loading: false })
   },
 
   startScan() {
@@ -39,5 +40,9 @@ Page({
         }
       }
     })
+  },
+
+  onPullDownRefresh() {
+    wx.stopPullDownRefresh()
   }
 })

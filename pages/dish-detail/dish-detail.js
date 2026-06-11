@@ -27,6 +27,8 @@ Page({
         selectedSpec: getDefaultSpec(dish)
       })
       this.checkFavorite(id)
+    }).catch(() => {
+      this.setData({ loading: false })
     })
   },
 
@@ -75,5 +77,19 @@ Page({
 
   onGoCart() {
     wx.switchTab({ url: '/pages/index/index' })
+  },
+
+  onPullDownRefresh() {
+    this.setData({ loading: true })
+    const id = this.data.dish ? this.data.dish.id : ''
+    if (id) {
+      get(API.DISH.DETAIL, { id }).then(dish => {
+        this.setData({ dish, loading: false, selectedSpec: getDefaultSpec(dish) })
+        this.checkFavorite(id)
+      }).catch(() => {
+        this.setData({ loading: false })
+      })
+    }
+    wx.stopPullDownRefresh()
   }
 })

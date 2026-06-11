@@ -13,8 +13,14 @@ page {
   --price: #FF4D4F;
   --success: #52C41A;
   --warning: #FF9500;
+  --danger: #FF4D4F;
+  --star: #FFB800;
   --card-bg: #FFFFFF;
   --divider: #F0F0F0;
+  --overlay: rgba(0,0,0,0.5);
+  --overlay-light: rgba(0,0,0,0.35);
+  --cart-bar-bg: #1F1F1F;
+  --danger-light: #FF7875;
   --shadow-sm: 0 2rpx 8rpx rgba(0,0,0,0.04);
   --shadow-md: 0 4rpx 16rpx rgba(0,0,0,0.06);
   --shadow-lg: 0 8rpx 24rpx rgba(0,0,0,0.08);

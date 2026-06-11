@@ -1,38 +1,71 @@
-<view class="page container fade-in">
-  <!-- 星级评分 -->
-  <view class="card">
-    <text class="card-title">评分</text>
-    <view class="stars">
-      <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{rating >= item ? 'active' : ''}}" bindtap="onStarTap" data-star="{{item}}">
-        {{rating >= item ? '★' : '☆'}}
+<wxs src="../../utils/filters.wxs" module="f" />
+<view class="page container">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="card fade-in">
+      <view class="skeleton skeleton-text" style="width:20%;margin-bottom:20rpx;"></view>
+      <view style="display:flex;gap:24rpx;justify-content:center;padding:16rpx 0;">
+        <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="skeleton" style="width:56rpx;height:56rpx;border-radius:50%;"></view>
       </view>
     </view>
-    <text class="rating-text">{{rating === 5 ? '非常满意' : rating === 4 ? '满意' : rating === 3 ? '一般' : rating === 2 ? '不满意' : '非常不满意'}}</text>
-  </view>
-
-  <!-- 快捷标签 -->
-  <view class="card">
-    <text class="card-title">标签</text>
-    <view class="tag-list">
-      <view wx:for="{{quickTags}}" wx:key="*this"
-        class="tag-item {{tags.indexOf(item) > -1 ? 'active' : ''}}"
-        bindtap="onTagTap" data-tag="{{item}}">
-        {{item}}
+    <view class="card fade-in">
+      <view class="skeleton skeleton-text" style="width:20%;margin-bottom:20rpx;"></view>
+      <view style="display:flex;flex-wrap:wrap;gap:16rpx;">
+        <view class="skeleton" style="width:120rpx;height:52rpx;border-radius:28rpx;"></view>
+        <view class="skeleton" style="width:120rpx;height:52rpx;border-radius:28rpx;"></view>
+        <view class="skeleton" style="width:120rpx;height:52rpx;border-radius:28rpx;"></view>
       </view>
     </view>
+    <view class="card fade-in">
+      <view class="skeleton skeleton-text" style="width:20%;margin-bottom:20rpx;"></view>
+      <view class="skeleton" style="width:100%;height:200rpx;border-radius:var(--radius-sm);"></view>
+    </view>
+  </block>
+
+  <!-- 空状态：订单参数缺失 -->
+  <view wx:elif="{{!orderId}}" class="empty fade-in">
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">无法评价</text>
+    <text class="empty-hint">订单信息缺失，请返回重试</text>
   </view>
 
-  <!-- 文字评价 -->
-  <view class="card">
-    <text class="card-title">评价内容</text>
-    <textarea class="review-input" placeholder="分享你的用餐体验..." maxlength="200" value="{{content}}" bindinput="onInput" />
-    <text class="char-count">{{content.length}}/200</text>
-  </view>
+  <!-- 实际内容 -->
+  <view wx:else class="fade-in">
+    <!-- 星级评分 -->
+    <view class="card">
+      <text class="card-title">评分</text>
+      <view class="stars">
+        <view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{rating >= item ? 'active' : ''}}" bindtap="onStarTap" data-star="{{item}}">
+          {{rating >= item ? '★' : '☆'}}
+        </view>
+      </view>
+      <text class="rating-text">{{rating === 5 ? '非常满意' : rating === 4 ? '满意' : rating === 3 ? '一般' : rating === 2 ? '不满意' : '非常不满意'}}</text>
+    </view>
 
-  <!-- 提交 -->
-  <view class="submit-wrap safe-bottom">
-    <view class="btn-primary submit-btn {{submitting ? 'btn-disabled' : ''}}" bindtap="onSubmit">
-      {{submitting ? '提交中...' : '提交评价'}}
+    <!-- 快捷标签 -->
+    <view class="card">
+      <text class="card-title">标签</text>
+      <view class="tag-list">
+        <view wx:for="{{quickTags}}" wx:key="*this"
+          class="tag-item {{tags.indexOf(item) > -1 ? 'active' : ''}}"
+          bindtap="onTagTap" data-tag="{{item}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 文字评价 -->
+    <view class="card">
+      <text class="card-title">评价内容</text>
+      <textarea class="review-input" placeholder="分享你的用餐体验..." maxlength="200" value="{{content}}" bindinput="onInput" />
+      <text class="char-count">{{content.length}}/200</text>
+    </view>
+
+    <!-- 提交 -->
+    <view class="submit-wrap safe-bottom">
+      <view class="btn-primary submit-btn {{submitting ? 'btn-disabled' : ''}}" bindtap="onSubmit">
+        {{submitting ? '提交中...' : '提交评价'}}
+      </view>
     </view>
   </view>
 </view>

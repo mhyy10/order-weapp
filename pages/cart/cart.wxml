@@ -1,11 +1,36 @@
 <wxs src="../../utils/filters.wxs" module="f" />
 <view class="page container">
-  <view wx:if="{{cartItems.length === 0}}" class="empty fade-in">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="flex-between" style="margin-bottom:20rpx;">
+      <view class="skeleton skeleton-text" style="width:30%"></view>
+      <view class="skeleton skeleton-text-sm" style="width:15%"></view>
+    </view>
+    <view wx:for="{{[1,2,3]}}" wx:key="*this" class="card cart-item fade-in">
+      <view class="cart-item-info">
+        <view class="skeleton skeleton-text" style="width:50%"></view>
+        <view class="skeleton skeleton-text-sm" style="width:30%"></view>
+      </view>
+      <view class="cart-item-right">
+        <view class="skeleton" style="width:100rpx;height:32rpx"></view>
+        <view style="display:flex;gap:12rpx;margin-top:12rpx;">
+          <view class="skeleton" style="width:48rpx;height:48rpx;border-radius:50%"></view>
+          <view class="skeleton" style="width:48rpx;height:32rpx"></view>
+          <view class="skeleton" style="width:48rpx;height:48rpx;border-radius:50%"></view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{cartItems.length === 0}}" class="empty fade-in">
     <text class="empty-icon">🛒</text>
     <text class="empty-text">购物车空空如也</text>
     <text class="empty-hint">去发现美味菜品吧</text>
     <navigator url="/pages/index/index" open-type="switchTab" class="btn-primary" style="margin-top:32rpx;">去点餐</navigator>
   </view>
+
+  <!-- 实际内容 -->
   <view wx:else class="fade-in">
     <view class="flex-between" style="margin-bottom:20rpx;">
       <text style="font-size:30rpx;font-weight:700;">已选 {{count}} 件</text>

@@ -15,7 +15,8 @@ Page({
     availableCoupons: [],
     total: 0,
     note: '',
-    submitting: false
+    submitting: false,
+    loading: true
   },
 
   onLoad() {
@@ -28,7 +29,8 @@ Page({
       subtotal,
       discount,
       total: subtotal - discount + serviceFee,
-      tableNo: app.globalData.tableNo || ''
+      tableNo: app.globalData.tableNo || '',
+      loading: false
     })
     this.loadCoupons()
   },
@@ -110,5 +112,10 @@ Page({
     }).catch(() => {
       this.setData({ submitting: false })
     })
+  },
+
+  onPullDownRefresh() {
+    this.loadCoupons()
+    wx.stopPullDownRefresh()
   }
 })
