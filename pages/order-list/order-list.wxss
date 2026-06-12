@@ -1,3 +1,44 @@
+/* Tab 栏 */
+.tab-bar {
+  display: flex;
+  white-space: nowrap;
+  background: var(--bg-white);
+  padding: 0 16rpx;
+  border-bottom: 1rpx solid var(--divider);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tab-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 28rpx;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tab-item.active {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: var(--primary);
+}
+
+/* 订单卡片 */
 .order-card { padding: 24rpx; transition: background 0.15s; }
 .order-card:active { background: var(--bg-gray); }
 
@@ -39,6 +80,14 @@
   background: var(--bg-gray); color: var(--text-light);
   font-weight: 400;
 }
+
+.cancel-tag {
+  font-size: 22rpx; font-weight: 500;
+  padding: 6rpx 18rpx; border-radius: 20rpx;
+  border: 1rpx solid var(--text-light);
+  color: var(--text-light);
+}
+.cancel-tag:active { opacity: 0.7; }
 
 .load-more {
   display: flex; align-items: center; justify-content: center; gap: 12rpx;

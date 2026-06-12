@@ -23,6 +23,20 @@ module.exports = {
     CANCELLED: 'cancelled'
   },
 
+  // 订单列表筛选 Tab
+  ORDER_TABS: [
+    { key: '', label: '全部' },
+    { key: 'pending', label: '待接单' },
+    { key: 'confirmed', label: '制作中' },
+    { key: 'ready', label: '待取餐' },
+    { key: 'delivering', label: '配送中' },
+    { key: 'completed', label: '已完成' },
+    { key: 'cancelled', label: '已取消' }
+  ],
+
+  // 用餐方式映射
+  DINE_TYPE_MAP: { dine_in: '堂食', takeaway: '自提', delivery: '配送' },
+
   // 用餐方式
   DINE_TYPE: {
     DINE_IN: 'dine_in',

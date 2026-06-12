@@ -1,5 +1,16 @@
 <wxs src="../../utils/filters.wxs" module="f" />
 <view class="page container">
+  <!-- 状态筛选 Tab -->
+  <scroll-view class="tab-bar" scroll-x enable-flex>
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+      bindtap="onTabTap"
+      data-key="{{item.key}}"
+    >{{item.label}}</view>
+  </scroll-view>
+
   <!-- 骨架屏 -->
   <block wx:if="{{loading}}">
     <view wx:for="{{[1,2,3]}}" wx:key="*this" class="card order-card fade-in">
@@ -18,7 +29,7 @@
   <!-- 空状态 -->
   <view wx:elif="{{orders.length === 0}}" class="empty fade-in">
     <text class="empty-icon">📋</text>
-    <text class="empty-text">暂无订单</text>
+    <text class="empty-text">暂无{{activeTab ? tabs[tabs.length-1].label === activeTab ? '已取消的' : '' : ''}}订单</text>
     <text class="empty-hint">去点些好吃的吧</text>
     <navigator url="/pages/index/index" open-type="switchTab" class="btn-primary" style="margin-top:32rpx;">去点餐</navigator>
   </view>
@@ -39,13 +50,15 @@
         <text wx:for="{{item.items}}" wx:key="cartKey" wx:for-item="dish" wx:for-index="di" wx:if="{{di < 3}}">
           {{dish.name}}{{di < item.items.length - 1 && di < 2 ? '、' : ''}}
         </text>
-        <text wx:if="{{item.items.length > 3}}" class="order-more">等{{item.itemCount}}件</text>
+        <text wx:if="{{item.hasMore || item.items.length > 3}}" class="order-more">等{{item.itemCount}}件</text>
       </view>
       <view class="order-footer">
         <text class="order-time">{{item.timeStr}}</text>
         <view class="order-footer-right">
           <view wx:if="{{item.status === 'completed' && !item.reviewed}}" class="review-tag" catchtap="onReview" data-id="{{item.id}}">📝 评价</view>
           <view wx:elif="{{item.status === 'completed' && item.reviewed}}" class="review-tag reviewed">已评价</view>
+          <!-- 待接单/制作中 显示取消按钮 -->
+          <view wx:if="{{item.status === 'pending' || item.status === 'confirmed'}}" class="cancel-tag" catchtap="onCancelOrder" data-id="{{item.id}}">取消</view>
           <text class="order-total">¥{{item.total}}</text>
         </view>
       </view>

@@ -1,10 +1,12 @@
-const { API, get } = require('../../utils/api')
+const { API, get, post } = require('../../utils/api')
 const { getStatusText, getStatusColor, formatDate } = require('../../utils/util')
-const { DEFAULT_PAGE_SIZE } = require('../../utils/constants')
+const { DEFAULT_PAGE_SIZE, ORDER_TABS, DINE_TYPE_MAP } = require('../../utils/constants')
 const app = getApp()
 
 Page({
   data: {
+    tabs: ORDER_TABS,
+    activeTab: '',
     orders: [],
     loading: true,
     loaded: false,
@@ -19,6 +21,13 @@ Page({
     if (this.data.loaded) this.refreshOrders()
   },
 
+  onTabTap(e) {
+    const key = e.currentTarget.dataset.key
+    if (key === this.data.activeTab) return
+    this.setData({ activeTab: key, page: 1, hasMore: true, orders: [] })
+    this.loadOrders()
+  },
+
   refreshOrders() {
     this.setData({ page: 1, hasMore: true })
     this.loadOrders()
@@ -27,7 +36,7 @@ Page({
   loadOrders() {
     const userId = app.getUserId()
     if (!userId) return this.setData({ loading: false })
-    const { page } = this.data
+    const { page, activeTab } = this.data
     const isLoadingMore = page > 1
 
     if (isLoadingMore) {
@@ -36,15 +45,17 @@ Page({
       this.setData({ loading: true })
     }
 
-    get(API.ORDER.LIST, { userId, page, pageSize: DEFAULT_PAGE_SIZE }).then(result => {
+    const params = { userId, page, pageSize: DEFAULT_PAGE_SIZE }
+    if (activeTab) params.status = activeTab
+
+    get(API.ORDER.LIST, params).then(result => {
       const orders = result.list || result.orders || []
       const formatted = orders.map(o => {
-        const dineTypeMap = { dine_in: '堂食', takeaway: '自提', delivery: '配送' }
         return {
           ...o,
           statusText: getStatusText(o.status),
           statusColor: getStatusColor(o.status),
-          dineTypeText: dineTypeMap[o.dineType] || o.dineType,
+          dineTypeText: DINE_TYPE_MAP[o.dineType] || o.dineType,
           timeStr: formatDate(o.createdAt, 'MM-DD HH:mm'),
           itemCount: o._itemCount || o.items.reduce((s, i) => s + i.quantity, 0),
           hasMore: o._hasMore || false,
@@ -69,7 +80,6 @@ Page({
     const completedOrders = orders.filter(o => o.status === 'completed')
     if (completedOrders.length === 0) return
 
-    // 逐个查询评价状态（可优化为批量接口）
     completedOrders.forEach(o => {
       get(API.REVIEW.BY_ORDER, { orderId: o.id }).then(review => {
         if (review) {
@@ -96,6 +106,22 @@ Page({
   onReview(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: `/pages/review/review?orderId=${id}` })
+  },
+
+  onCancelOrder(e) {
+    const id = e.currentTarget.dataset.id
+    wx.showModal({
+      title: '确认取消',
+      content: '确定要取消此订单吗？优惠券和积分将退还。',
+      success: (res) => {
+        if (res.confirm) {
+          post(API.ORDER.CANCEL, { id }).then(() => {
+            wx.showToast({ title: '已取消', icon: 'success' })
+            this.refreshOrders()
+          })
+        }
+      }
+    })
   },
 
   onPullDownRefresh() {
