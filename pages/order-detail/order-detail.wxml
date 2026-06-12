@@ -15,12 +15,6 @@
         <view class="skeleton skeleton-text-sm" style="width:20%"></view>
       </view>
     </view>
-    <view class="card fade-in">
-      <view wx:for="{{[1,2,3]}}" wx:key="*this" style="display:flex;justify-content:space-between;padding:12rpx 0;">
-        <view class="skeleton skeleton-text-sm" style="width:25%"></view>
-        <view class="skeleton skeleton-text-sm" style="width:20%"></view>
-      </view>
-    </view>
   </block>
 
   <!-- 空状态：订单不存在 -->
@@ -41,10 +35,31 @@
       <text class="status-text" style="color:{{order.statusColor}}">{{order.statusText}}</text>
       <text class="status-order-id">订单号: {{order.id}}</text>
       <text class="status-time">{{order.timeStr}}</text>
+      <!-- 取消原因 -->
+      <view wx:if="{{order.cancelReason}}" class="cancel-reason">
+        <text class="cancel-reason-text">取消原因：{{order.cancelReason}}</text>
+      </view>
       <!-- 配送中额外提示 -->
       <view wx:if="{{order.status === 'delivering' && order.delivery}}" class="delivering-info">
         <text class="delivering-hint">🛵 骑手 {{order.delivery.riderName}} 正在配送中</text>
         <text class="delivering-phone" bindtap="callRider">📞 {{order.delivery.riderPhone}}</text>
+      </view>
+    </view>
+
+    <!-- 订单时间线 -->
+    <view class="card" wx:if="{{timeline.length > 0}}">
+      <text class="card-title">订单进度</text>
+      <view class="timeline">
+        <view wx:for="{{timeline}}" wx:key="index" class="timeline-step {{item.completed ? 'completed' : ''}} {{item.current ? 'current' : ''}} {{item.cancelled ? 'cancelled' : ''}}">
+          <view class="timeline-dot-wrap">
+            <view class="timeline-dot"></view>
+            <view wx:if="{{index < timeline.length - 1}}" class="timeline-line"></view>
+          </view>
+          <view class="timeline-content">
+            <text class="timeline-label">{{item.label}}</text>
+            <text wx:if="{{item.timeStr}}" class="timeline-time">{{item.timeStr}}</text>
+          </view>
+        </view>
       </view>
     </view>
 
@@ -91,15 +106,17 @@
       <view class="summary-row"><text class="label">小计</text><text>¥{{order.subtotal}}</text></view>
       <view class="summary-row" wx:if="{{order.discount > 0}}"><text class="label">优惠</text><text style="color:var(--success);">-¥{{order.discount}}</text></view>
       <view class="summary-row" wx:if="{{order.couponDiscount > 0}}"><text class="label">优惠券</text><text style="color:var(--success);">-¥{{order.couponDiscount}}</text></view>
+      <view class="summary-row" wx:if="{{order.pointsDiscount > 0}}"><text class="label">积分抵扣</text><text style="color:var(--success);">-¥{{order.pointsDiscount}}</text></view>
       <view class="summary-row" wx:if="{{order.deliveryFee > 0}}"><text class="label">配送费</text><text>¥{{order.deliveryFee}}</text></view>
       <view class="summary-row" wx:if="{{order.dineType === 'delivery' && order.deliveryFee === 0}}"><text class="label">配送费</text><text style="color:var(--success);">免配送费</text></view>
+      <view class="summary-row" wx:if="{{order.dineType === 'dine_in'}}"><text class="label">餐位费</text><text>¥{{order.peopleCount * 3}}</text></view>
       <view class="divider"></view>
       <view class="summary-row total"><text style="font-weight:600;">合计</text><text class="total-price">¥{{order.total}}</text></view>
     </view>
 
     <!-- Actions -->
     <view class="actions">
-      <view wx:if="{{order.status === 'pending'}}" class="btn-outline action-btn" bindtap="onCancel">取消订单</view>
+      <view wx:if="{{order.status === 'pending' || order.status === 'confirmed'}}" class="btn-outline action-btn" bindtap="onCancel">取消订单</view>
       <view wx:if="{{order.status === 'confirmed'}}" class="btn-outline action-btn" style="border-color:var(--primary);color:var(--primary);">制作中，请稍候</view>
       <!-- 堂食/自提：可取餐 -->
       <view wx:if="{{order.status === 'ready' && order.dineType !== 'delivery'}}" class="btn-primary action-btn" bindtap="onConfirmPickup">确认取餐</view>

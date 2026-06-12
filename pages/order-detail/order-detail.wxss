@@ -10,6 +10,104 @@
 .status-order-id { font-size: 24rpx; color: var(--text-secondary); display: block; }
 .status-time { font-size: 22rpx; color: var(--text-light); display: block; margin-top: 6rpx; }
 
+/* 取消原因 */
+.cancel-reason {
+  margin-top: 16rpx; padding: 12rpx 24rpx;
+  background: #fff5f5; border-radius: var(--radius-sm);
+}
+.cancel-reason-text { font-size: 24rpx; color: #e53e3e; }
+
+/* 订单时间线 */
+.timeline { padding: 8rpx 0; }
+
+.timeline-step {
+  display: flex;
+  min-height: 80rpx;
+  position: relative;
+}
+
+.timeline-step:last-child { min-height: auto; }
+
+.timeline-dot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40rpx;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.timeline-dot {
+  width: 20rpx; height: 20rpx;
+  border-radius: 50%;
+  background: var(--divider);
+  border: 4rpx solid var(--bg-gray);
+  flex-shrink: 0;
+  z-index: 1;
+  margin-top: 6rpx;
+}
+
+.timeline-step.completed .timeline-dot {
+  background: var(--success);
+  border-color: #e6f7e6;
+}
+
+.timeline-step.current .timeline-dot {
+  background: var(--primary);
+  border-color: var(--primary-bg);
+  width: 24rpx; height: 24rpx;
+  margin-top: 4rpx;
+}
+
+.timeline-step.cancelled .timeline-dot {
+  background: #e53e3e;
+  border-color: #fff5f5;
+}
+
+.timeline-line {
+  width: 4rpx;
+  flex: 1;
+  background: var(--divider);
+  margin: 4rpx 0;
+}
+
+.timeline-step.completed .timeline-line {
+  background: var(--success);
+}
+
+.timeline-content {
+  flex: 1;
+  padding: 0 0 20rpx 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.timeline-label {
+  font-size: 28rpx;
+  color: var(--text-light);
+}
+
+.timeline-step.completed .timeline-label {
+  color: var(--text);
+}
+
+.timeline-step.current .timeline-label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.timeline-step.cancelled .timeline-label {
+  color: #e53e3e;
+}
+
+.timeline-time {
+  font-size: 22rpx;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+/* 菜品详情 */
 .detail-item {
   display: flex; justify-content: space-between; align-items: center;
   padding: 14rpx 0;
