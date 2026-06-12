@@ -36,11 +36,16 @@
     <!-- Status -->
     <view class="status-card card">
       <view class="status-icon-wrap" style="background:{{order.statusColor}}18;">
-        <text class="status-icon" style="color:{{order.statusColor}};">{{order.status === 'completed' ? '✓' : order.status === 'cancelled' ? '✗' : '◎'}}</text>
+        <text class="status-icon" style="color:{{order.statusColor}};">{{order.status === 'completed' ? '✓' : order.status === 'cancelled' ? '✗' : order.status === 'delivering' ? '🛵' : '◎'}}</text>
       </view>
       <text class="status-text" style="color:{{order.statusColor}}">{{order.statusText}}</text>
       <text class="status-order-id">订单号: {{order.id}}</text>
       <text class="status-time">{{order.timeStr}}</text>
+      <!-- 配送中额外提示 -->
+      <view wx:if="{{order.status === 'delivering' && order.delivery}}" class="delivering-info">
+        <text class="delivering-hint">🛵 骑手 {{order.delivery.riderName}} 正在配送中</text>
+        <text class="delivering-phone" bindtap="callRider">📞 {{order.delivery.riderPhone}}</text>
+      </view>
     </view>
 
     <!-- Items -->
@@ -61,15 +66,33 @@
       </view>
     </view>
 
+    <!-- 配送地址（配送订单） -->
+    <view class="card" wx:if="{{order.dineType === 'delivery' && order.address}}">
+      <text class="card-title">配送信息</text>
+      <view class="delivery-address-info">
+        <view class="addr-row">
+          <text class="addr-label">📍 收货地址</text>
+        </view>
+        <view class="addr-detail">
+          <text class="addr-name">{{order.address.name}}</text>
+          <text class="addr-phone">{{order.address.phone}}</text>
+        </view>
+        <text class="addr-full">{{order.address.province}}{{order.address.city}}{{order.address.district}} {{order.address.detail}}</text>
+      </view>
+    </view>
+
     <!-- Summary -->
     <view class="card">
-      <view class="summary-row"><text class="label">桌号</text><text>{{order.tableNo || '-'}}</text></view>
-      <view class="summary-row"><text class="label">就餐方式</text><text>{{order.dineType === 'dine_in' ? '堂食' : '外带'}}</text></view>
+      <view class="summary-row"><text class="label">就餐方式</text><text>{{order.dineTypeText}}</text></view>
+      <view class="summary-row" wx:if="{{order.dineType === 'dine_in'}}"><text class="label">桌号</text><text>{{order.tableNo || '-'}}</text></view>
+      <view class="summary-row" wx:if="{{order.dineType === 'dine_in'}}"><text class="label">人数</text><text>{{order.peopleCount}} 位</text></view>
       <view class="summary-row" wx:if="{{order.note}}"><text class="label">备注</text><text>{{order.note}}</text></view>
       <view class="divider"></view>
       <view class="summary-row"><text class="label">小计</text><text>¥{{order.subtotal}}</text></view>
       <view class="summary-row" wx:if="{{order.discount > 0}}"><text class="label">优惠</text><text style="color:var(--success);">-¥{{order.discount}}</text></view>
       <view class="summary-row" wx:if="{{order.couponDiscount > 0}}"><text class="label">优惠券</text><text style="color:var(--success);">-¥{{order.couponDiscount}}</text></view>
+      <view class="summary-row" wx:if="{{order.deliveryFee > 0}}"><text class="label">配送费</text><text>¥{{order.deliveryFee}}</text></view>
+      <view class="summary-row" wx:if="{{order.dineType === 'delivery' && order.deliveryFee === 0}}"><text class="label">配送费</text><text style="color:var(--success);">免配送费</text></view>
       <view class="divider"></view>
       <view class="summary-row total"><text style="font-weight:600;">合计</text><text class="total-price">¥{{order.total}}</text></view>
     </view>
@@ -78,7 +101,12 @@
     <view class="actions">
       <view wx:if="{{order.status === 'pending'}}" class="btn-outline action-btn" bindtap="onCancel">取消订单</view>
       <view wx:if="{{order.status === 'confirmed'}}" class="btn-outline action-btn" style="border-color:var(--primary);color:var(--primary);">制作中，请稍候</view>
-      <view wx:if="{{order.status === 'ready'}}" class="btn-primary action-btn" bindtap="onConfirmPickup">确认取餐</view>
+      <!-- 堂食/自提：可取餐 -->
+      <view wx:if="{{order.status === 'ready' && order.dineType !== 'delivery'}}" class="btn-primary action-btn" bindtap="onConfirmPickup">确认取餐</view>
+      <!-- 配送：配送中 -->
+      <view wx:if="{{order.status === 'ready' && order.dineType === 'delivery'}}" class="btn-outline action-btn" style="border-color:var(--primary);color:var(--primary);">等待骑手取餐</view>
+      <view wx:if="{{order.status === 'delivering'}}" class="btn-primary action-btn" bindtap="onConfirmDelivered">确认收货</view>
+      <view wx:if="{{order.status === 'delivering'}}" class="btn-outline action-btn" bindtap="onViewTrack">查看配送追踪</view>
       <view wx:if="{{order.status === 'completed'}}" class="btn-primary action-btn" bindtap="onReview">📝 评价</view>
       <view wx:if="{{order.status === 'completed' || order.status === 'cancelled'}}" class="btn-outline action-btn" bindtap="onReorder">再来一单</view>
     </view>

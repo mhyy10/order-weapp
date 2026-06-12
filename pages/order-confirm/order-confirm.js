@@ -13,6 +13,8 @@ Page({
     couponDiscount: 0,
     selectedCoupon: null,
     availableCoupons: [],
+    deliveryFee: 0,
+    estimatedTime: 0,
     total: 0,
     note: '',
     submitting: false,
@@ -46,9 +48,7 @@ Page({
   },
 
   onShow() {
-    // 检查是否从地址选择页返回
-    const selectedAddress = this.data.selectedAddress
-    // 如果有 selectedAddress 说明是从地址页选择回来的，已在 onSelectAddress 回调中设置
+    // 从地址选择页返回时，恢复选中的地址
   },
 
   loadCoupons() {
@@ -69,18 +69,38 @@ Page({
     }).catch(() => {})
   },
 
+  // 加载配送费
+  loadDeliveryFee() {
+    if (this.data.dineType !== DINE_TYPE.DELIVERY || !this.data.selectedAddress) {
+      this.setData({ deliveryFee: 0, estimatedTime: 0 })
+      this.recalcTotal()
+      return
+    }
+    post(API.DELIVERY.FEE, {
+      addressId: this.data.selectedAddress.id,
+      subtotal: this.data.subtotal
+    }).then(data => {
+      this.setData({
+        deliveryFee: data.deliveryFee,
+        estimatedTime: data.estimatedTime
+      })
+      this.recalcTotal()
+    }).catch(() => {
+      this.setData({ deliveryFee: 5, estimatedTime: 30 })
+      this.recalcTotal()
+    })
+  },
+
   recalcMaxPoints() {
-    // 最多可抵扣订单金额的30%，100积分=1元
-    const { total, pointsBalance, couponDiscount, discount, subtotal, dineType, peopleCount } = this.data
+    const { total, pointsBalance, couponDiscount, discount, subtotal, dineType, peopleCount, deliveryFee } = this.data
     const serviceFee = dineType === DINE_TYPE.DINE_IN ? peopleCount * SERVICE_FEE_PER_PERSON : 0
-    const orderAmount = subtotal - discount - couponDiscount + serviceFee
-    const maxDeductionAmount = Math.floor(orderAmount * 0.3 * 100) / 100 // 订单金额30%
-    const maxPoints = Math.min(pointsBalance, Math.floor(maxDeductionAmount * 100)) // 100积分=1元
+    const orderAmount = subtotal - discount - couponDiscount + serviceFee + deliveryFee
+    const maxDeductionAmount = Math.floor(orderAmount * 0.3 * 100) / 100
+    const maxPoints = Math.min(pointsBalance, Math.floor(maxDeductionAmount * 100))
     this.setData({
       maxPointsDeduction: maxDeductionAmount,
       maxPoints: maxPoints
     })
-    // 如果当前使用的积分超过了最大值，自动调整
     if (this.data.pointsToUse > maxPoints) {
       this.setData({ pointsToUse: maxPoints })
       this.recalcPointsDeduction()
@@ -89,14 +109,14 @@ Page({
 
   recalcPointsDeduction() {
     const pointsToUse = this.data.pointsToUse || 0
-    const pointsDeduction = Math.floor(pointsToUse / 100 * 100) / 100 // 100积分=1元，保留两位小数
+    const pointsDeduction = Math.floor(pointsToUse / 100 * 100) / 100
     this.setData({ pointsDeduction })
   },
 
   recalcTotal() {
-    const { subtotal, discount, couponDiscount, dineType, peopleCount, pointsDeduction } = this.data
+    const { subtotal, discount, couponDiscount, dineType, peopleCount, pointsDeduction, deliveryFee } = this.data
     const serviceFee = dineType === DINE_TYPE.DINE_IN ? peopleCount * SERVICE_FEE_PER_PERSON : 0
-    this.setData({ total: subtotal - discount - couponDiscount - pointsDeduction + serviceFee })
+    this.setData({ total: subtotal - discount - couponDiscount - pointsDeduction + serviceFee + deliveryFee })
     this.recalcMaxPoints()
   },
 
@@ -106,7 +126,6 @@ Page({
     if (!coupon || !coupon.canUse) return
 
     const selectedCoupon = this.data.selectedCoupon
-    // 再次点击取消选择
     if (selectedCoupon && selectedCoupon.userCouponId === coupon.userCouponId) {
       this.setData({ selectedCoupon: null, couponDiscount: 0 })
     } else {
@@ -118,7 +137,15 @@ Page({
   onDineTypeChange(e) {
     const type = e.currentTarget.dataset.type
     this.setData({ dineType: type })
+    // 切换模式时重置配送费
+    if (type !== DINE_TYPE.DELIVERY) {
+      this.setData({ deliveryFee: 0, estimatedTime: 0 })
+    }
     this.recalcTotal()
+    // 配送模式自动加载配送费
+    if (type === DINE_TYPE.DELIVERY && this.data.selectedAddress) {
+      this.loadDeliveryFee()
+    }
   },
 
   onPeopleChange(e) {
@@ -134,9 +161,19 @@ Page({
     this.setData({ note: e.detail.value })
   },
 
+  onTableInput(e) {
+    this.setData({ tableNo: e.detail.value })
+  },
+
   // 地址选择
   onChooseAddress() {
     wx.navigateTo({ url: '/pages/address/address?selectMode=true' })
+  },
+
+  // 从地址选择页回调
+  onAddressSelected(address) {
+    this.setData({ selectedAddress: address })
+    this.loadDeliveryFee()
   },
 
   // 积分相关
@@ -151,7 +188,6 @@ Page({
       this.setData({ pointsToUse: 0, pointsDeduction: 0 })
       this.recalcTotal()
     } else {
-      // 默认使用最大可用积分
       const pointsToUse = this.data.maxPoints
       this.setData({ pointsToUse })
       this.recalcPointsDeduction()
@@ -164,7 +200,6 @@ Page({
     if (val < 0) val = 0
     if (val > this.data.maxPoints) val = this.data.maxPoints
     if (val > this.data.pointsBalance) val = this.data.pointsBalance
-    // 积分必须是100的整数倍
     val = Math.floor(val / 100) * 100
     this.setData({ pointsToUse: val })
     this.recalcPointsDeduction()
@@ -175,10 +210,13 @@ Page({
     if (this.data.submitting) return
     if (this.data.cartItems.length === 0) return wx.showToast({ title: '购物车为空', icon: 'none' })
 
-    // 外带时校验地址
-    if (this.data.dineType === 'takeaway' && !this.data.selectedAddress) {
-      wx.showToast({ title: '请选择收货地址', icon: 'none' })
-      return
+    // 堂食校验桌号
+    if (this.data.dineType === DINE_TYPE.DINE_IN && !this.data.tableNo) {
+      return wx.showToast({ title: '请输入桌号', icon: 'none' })
+    }
+    // 配送校验地址
+    if (this.data.dineType === DINE_TYPE.DELIVERY && !this.data.selectedAddress) {
+      return wx.showToast({ title: '请选择收货地址', icon: 'none' })
     }
 
     this.setData({ submitting: true })
@@ -203,6 +241,11 @@ Page({
     // 附加积分
     if (this.data.usePoints && this.data.pointsToUse > 0) {
       params.usePoints = this.data.pointsToUse
+    }
+    // 附加配送费（配送模式）
+    if (this.data.dineType === DINE_TYPE.DELIVERY) {
+      params.deliveryFee = this.data.deliveryFee
+      params.estimatedTime = this.data.estimatedTime
     }
 
     post(API.ORDER.CREATE, params).then(order => {

@@ -34,3 +34,19 @@
 
 .actions { margin-top: 40rpx; display: flex; gap: 20rpx; }
 .action-btn { flex: 1; text-align: center; padding: 24rpx; }
+
+/* 配送信息 */
+.delivering-info {
+  margin-top: 16rpx; padding-top: 16rpx;
+  border-top: 1rpx solid var(--divider);
+}
+.delivering-hint { font-size: 28rpx; color: var(--primary); display: block; font-weight: 600; }
+.delivering-phone { font-size: 24rpx; color: var(--text-secondary); display: block; margin-top: 6rpx; }
+
+.delivery-address-info { padding: 8rpx 0; }
+.addr-row { margin-bottom: 8rpx; }
+.addr-label { font-size: 28rpx; font-weight: 600; color: var(--text); }
+.addr-detail { display: flex; align-items: center; gap: 16rpx; margin-bottom: 6rpx; }
+.addr-name { font-size: 28rpx; font-weight: 700; color: var(--text); }
+.addr-phone { font-size: 26rpx; color: var(--text-secondary); }
+.addr-full { font-size: 24rpx; color: var(--text-secondary); line-height: 1.5; }

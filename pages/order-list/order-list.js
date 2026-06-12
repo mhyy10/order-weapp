@@ -38,14 +38,18 @@ Page({
 
     get(API.ORDER.LIST, { userId, page, pageSize: DEFAULT_PAGE_SIZE }).then(result => {
       const orders = result.orders || result
-      const formatted = orders.map(o => ({
-        ...o,
-        statusText: getStatusText(o.status),
-        statusColor: getStatusColor(o.status),
-        timeStr: formatDate(o.createdAt, 'MM-DD HH:mm'),
-        itemCount: o.items.reduce((s, i) => s + i.quantity, 0),
-        reviewed: false  // 默认未评价，后续查询
-      }))
+      const formatted = orders.map(o => {
+        const dineTypeMap = { dine_in: '堂食', takeaway: '自提', delivery: '配送' }
+        return {
+          ...o,
+          statusText: getStatusText(o.status),
+          statusColor: getStatusColor(o.status),
+          dineTypeText: dineTypeMap[o.dineType] || o.dineType,
+          timeStr: formatDate(o.createdAt, 'MM-DD HH:mm'),
+          itemCount: o.items.reduce((s, i) => s + i.quantity, 0),
+          reviewed: false
+        }
+      })
 
       this.setData({
         orders: isLoadingMore ? [...this.data.orders, ...formatted] : formatted,

@@ -27,7 +27,10 @@
   <view wx:else class="fade-in">
     <view wx:for="{{orders}}" wx:key="id" class="card order-card" bindtap="onOrderTap" data-id="{{item.id}}">
       <view class="order-header">
-        <text class="order-id">{{item.id}}</text>
+        <view class="order-header-left">
+          <text class="order-id">{{item.id}}</text>
+          <view class="dine-type-tag dine-type-{{item.dineType}}">{{item.dineTypeText}}</view>
+        </view>
         <view class="order-status-tag" style="background:{{item.statusColor}}22;color:{{item.statusColor}};">
           {{item.statusText}}
         </view>

@@ -1,0 +1,106 @@
+<view class="page container">
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="card fade-in">
+      <view class="skeleton" style="width:80rpx;height:80rpx;border-radius:50%;margin:0 auto 16rpx;"></view>
+      <view class="skeleton skeleton-text" style="width:40%;margin:0 auto 12rpx;"></view>
+      <view class="skeleton skeleton-text-sm" style="width:60%;margin:0 auto;"></view>
+    </view>
+    <view class="card fade-in">
+      <view wx:for="{{[1,2,3,4]}}" wx:key="*this" style="display:flex;gap:20rpx;padding:20rpx 0;">
+        <view class="skeleton" style="width:40rpx;height:40rpx;border-radius:50%;flex-shrink:0;"></view>
+        <view style="flex:1;">
+          <view class="skeleton skeleton-text" style="width:50%;margin-bottom:8rpx;"></view>
+          <view class="skeleton skeleton-text-sm" style="width:30%;"></view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 无数据 -->
+  <view wx:elif="{{!delivery}}" class="empty fade-in">
+    <text class="empty-icon">🛵</text>
+    <text class="empty-text">暂无配送信息</text>
+    <text class="empty-hint">订单可能不是配送类型</text>
+  </view>
+
+  <!-- 配送追踪内容 -->
+  <view wx:elif="{{delivery}}" class="fade-in">
+    <!-- 骑手信息卡 -->
+    <view class="card rider-card" wx:if="{{delivery.rider && delivery.status === 'delivering'}}">
+      <view class="rider-avatar">🛵</view>
+      <view class="rider-info">
+        <text class="rider-name">{{delivery.rider.name}}</text>
+        <text class="rider-status">正在为您配送</text>
+      </view>
+      <view class="rider-call" bindtap="onCallRider">
+        <text class="call-icon">📞</text>
+        <text class="call-text">联系骑手</text>
+      </view>
+    </view>
+
+    <!-- 等待骑手 -->
+    <view class="card rider-card" wx:elif="{{delivery.status === 'ready'}}">
+      <view class="rider-avatar waiting">🕐</view>
+      <view class="rider-info">
+        <text class="rider-name">等待骑手取餐</text>
+        <text class="rider-status">骑手即将到达商家</text>
+      </view>
+    </view>
+
+    <!-- 配送地图占位 -->
+    <view class="card map-card" wx:if="{{delivery.status === 'delivering'}}">
+      <view class="map-placeholder">
+        <view class="map-route">
+          <view class="map-start">
+            <text class="map-dot start"></text>
+            <text class="map-label">商家</text>
+          </view>
+          <view class="map-line"></view>
+          <view class="map-rider">
+            <text class="map-dot rider"></text>
+            <text class="map-label">骑手</text>
+          </view>
+          <view class="map-line dashed"></view>
+          <view class="map-end">
+            <text class="map-dot end"></text>
+            <text class="map-label">您</text>
+          </view>
+        </view>
+        <text class="map-hint">预计 {{order.estimatedTime || delivery.estimatedTime || 30}} 分钟送达</text>
+      </view>
+    </view>
+
+    <!-- 配送地址信息 -->
+    <view class="card" wx:if="{{delivery.address}}">
+      <text class="card-title">收货地址</text>
+      <view class="addr-info">
+        <view class="addr-row">
+          <text class="addr-name">{{delivery.address.name}}</text>
+          <text class="addr-phone">{{delivery.address.phone}}</text>
+        </view>
+        <text class="addr-detail">{{delivery.address.province}}{{delivery.address.city}}{{delivery.address.district}} {{delivery.address.detail}}</text>
+      </view>
+    </view>
+
+    <!-- 时间轴 -->
+    <view class="card">
+      <text class="card-title">配送进度</text>
+      <view class="timeline">
+        <view wx:for="{{delivery.timeline}}" wx:key="status"
+              class="timeline-item {{item.completed ? 'completed' : ''}} {{index === 0 ? 'first' : ''}}">
+          <view class="timeline-dot-wrap">
+            <view class="timeline-dot {{item.completed ? 'active' : ''}}">
+              <text wx:if="{{item.completed}}">{{item.icon}}</text>
+            </view>
+            <view wx:if="{{index < delivery.timeline.length - 1}}" class="timeline-line {{item.completed ? 'active' : ''}}"></view>
+          </view>
+          <view class="timeline-content">
+            <text class="timeline-desc {{item.completed ? 'active' : ''}}">{{item.desc}}</text>
+            <text wx:if="{{item.timeStr}}" class="timeline-time">{{item.timeStr}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -47,6 +47,7 @@ function getStatusText(status) {
     'pending': '待接单',
     'confirmed': '制作中',
     'ready': '可取餐',
+    'delivering': '配送中',
     'completed': '已完成',
     'cancelled': '已取消'
   }
@@ -58,6 +59,7 @@ function getStatusColor(status) {
     'pending': '#FF9500',
     'confirmed': '#FF6B35',
     'ready': '#52C41A',
+    'delivering': '#1890FF',
     'completed': '#999999',
     'cancelled': '#CCCCCC'
   }

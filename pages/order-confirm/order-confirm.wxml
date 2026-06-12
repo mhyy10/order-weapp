@@ -28,7 +28,7 @@
 
   <!-- 实际内容 -->
   <view wx:else class="fade-in">
-    <!-- Dine type -->
+    <!-- Dine type: 3种模式 -->
     <view class="card">
       <text class="card-title">就餐方式</text>
       <view class="dine-types">
@@ -37,15 +37,20 @@
           <text class="dine-label">堂食</text>
         </view>
         <view class="dine-type {{dineType === 'takeaway' ? 'active' : ''}}" bindtap="onDineTypeChange" data-type="takeaway">
-          <text class="dine-icon">🍱</text>
-          <text class="dine-label">外带</text>
+          <text class="dine-icon">🥡</text>
+          <text class="dine-label">自提</text>
+        </view>
+        <view class="dine-type {{dineType === 'delivery' ? 'active' : ''}}" bindtap="onDineTypeChange" data-type="delivery">
+          <text class="dine-icon">🛵</text>
+          <text class="dine-label">配送</text>
         </view>
       </view>
 
+      <!-- 堂食：桌号 + 人数 -->
       <view wx:if="{{dineType === 'dine_in'}}" class="info-rows">
         <view class="info-row">
           <text class="info-label">📍 桌号</text>
-          <input class="info-input" placeholder="请输入桌号" value="{{tableNo}}" bindinput="e => this.setData({tableNo: e.detail.value})" />
+          <input class="info-input" placeholder="请输入桌号" value="{{tableNo}}" bindinput="onTableInput" />
         </view>
         <view class="info-row">
           <text class="info-label">👥 就餐人数</text>
@@ -56,22 +61,52 @@
           </view>
         </view>
       </view>
+
+      <!-- 自提：预计到店时间 -->
+      <view wx:if="{{dineType === 'takeaway'}}" class="info-rows">
+        <view class="info-row">
+          <text class="info-label">🕐 预计到店</text>
+          <text class="info-value">约 15-20 分钟</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">📍 取餐地址</text>
+          <text class="info-value">小灶点餐（门店）</text>
+        </view>
+      </view>
+
+      <!-- 配送：地址 + 配送费 + 预计送达 -->
+      <view wx:if="{{dineType === 'delivery'}}" class="info-rows">
+        <view class="delivery-address-row" bindtap="onChooseAddress">
+          <view wx:if="{{selectedAddress}}" class="address-info">
+            <view class="address-top-row">
+              <text class="address-name">{{selectedAddress.name}}</text>
+              <text class="address-phone">{{selectedAddress.phone}}</text>
+            </view>
+            <text class="address-detail-text">{{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}} {{selectedAddress.detail}}</text>
+          </view>
+          <view wx:else class="address-empty-inline">
+            <text>📍 请选择收货地址</text>
+          </view>
+          <text class="address-arrow">›</text>
+        </view>
+        <view wx:if="{{selectedAddress}}" class="info-row">
+          <text class="info-label">🛵 配送费</text>
+          <text class="info-value {{deliveryFee === 0 ? 'free' : ''}}">{{deliveryFee === 0 ? '免配送费' : '¥' + deliveryFee}}</text>
+        </view>
+        <view wx:if="{{selectedAddress}}" class="info-row">
+          <text class="info-label">🕐 预计送达</text>
+          <text class="info-value">约 {{estimatedTime}} 分钟</text>
+        </view>
+        <view wx:if="{{!selectedAddress}}" class="delivery-fee-hint">
+          <text class="fee-hint-text">满30元免配送费，基础配送费5元</text>
+        </view>
+      </view>
     </view>
 
-    <!-- 配送地址 -->
-    <view class="card" wx:if="{{dineType === 'takeaway'}}">
+    <!-- 配送地址卡片（配送模式，地址未选时突出提示） -->
+    <view class="card delivery-card" wx:if="{{dineType === 'delivery' && !selectedAddress}}">
       <text class="card-title">配送地址</text>
-      <view wx:if="{{selectedAddress}}" class="address-selected" bindtap="onChooseAddress">
-        <view class="address-info">
-          <view class="address-top-row">
-            <text class="address-name">{{selectedAddress.name}}</text>
-            <text class="address-phone">{{selectedAddress.phone}}</text>
-          </view>
-          <text class="address-detail-text">{{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}} {{selectedAddress.detail}}</text>
-        </view>
-        <text class="address-arrow">›</text>
-      </view>
-      <view wx:else class="address-empty" bindtap="onChooseAddress">
+      <view class="address-empty" bindtap="onChooseAddress">
         <text class="address-empty-icon">📍</text>
         <text class="address-empty-text">请选择收货地址</text>
         <text class="address-arrow">›</text>
@@ -112,6 +147,14 @@
       <view class="summary-row" wx:if="{{dineType === 'dine_in'}}">
         <text class="label">餐位费</text>
         <text>¥3/位 × {{peopleCount}}</text>
+      </view>
+      <view class="summary-row" wx:if="{{dineType === 'delivery' && deliveryFee > 0}}">
+        <text class="label">配送费</text>
+        <text>¥{{deliveryFee}}</text>
+      </view>
+      <view class="summary-row" wx:if="{{dineType === 'delivery' && deliveryFee === 0 && selectedAddress}}">
+        <text class="label" style="color:var(--success);">配送费</text>
+        <text style="color:var(--success);">免配送费</text>
       </view>
       <view class="divider"></view>
       <view class="summary-row total-row">

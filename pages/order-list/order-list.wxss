@@ -2,7 +2,15 @@
 .order-card:active { background: var(--bg-gray); }
 
 .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
+.order-header-left { display: flex; align-items: center; gap: 12rpx; }
 .order-id { font-size: 24rpx; color: var(--text-light); }
+.dine-type-tag {
+  font-size: 20rpx; font-weight: 600;
+  padding: 2rpx 12rpx; border-radius: 8rpx;
+}
+.dine-type-dine_in { background: #e3f2fd; color: #1565c0; }
+.dine-type-takeaway { background: #fff3e0; color: #e65100; }
+.dine-type-delivery { background: #fce4ec; color: #c62828; }
 .order-status-tag {
   font-size: 22rpx; font-weight: 600;
   padding: 4rpx 16rpx;

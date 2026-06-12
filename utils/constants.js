@@ -26,7 +26,8 @@ module.exports = {
   // 用餐方式
   DINE_TYPE: {
     DINE_IN: 'dine_in',
-    TAKEAWAY: 'takeaway'
+    TAKEAWAY: 'takeaway',
+    DELIVERY: 'delivery'
   },
 
   // 优惠券类型

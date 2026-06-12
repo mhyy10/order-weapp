@@ -16,7 +16,8 @@
     "pages/review/review",
     "pages/address/address",
     "pages/address-edit/address-edit",
-    "pages/points/points"
+    "pages/points/points",
+    "pages/delivery-track/delivery-track"
   ],
   "window": {
     "navigationBarBackgroundColor": "#FF6B35",

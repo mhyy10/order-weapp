@@ -24,7 +24,9 @@ const API = {
     CONFIRM: `${API_BASE}/order/confirm`,
     ACCEPT: `${API_BASE}/order/accept`,
     READY: `${API_BASE}/order/ready`,
-    COMPLETE: `${API_BASE}/order/complete`
+    COMPLETE: `${API_BASE}/order/complete`,
+    DELIVERING: `${API_BASE}/order/delivering`,
+    DELIVERED: `${API_BASE}/order/delivered`
   },
   USER: {
     LOGIN: `${API_BASE}/user/login`,
@@ -58,6 +60,10 @@ const API = {
   POINTS: {
     BALANCE: `${API_BASE}/points/balance`,
     RECORDS: `${API_BASE}/points/records`
+  },
+  DELIVERY: {
+    FEE: `${API_BASE}/delivery/fee`,
+    TRACK: `${API_BASE}/delivery/track`
   }
 }
 
