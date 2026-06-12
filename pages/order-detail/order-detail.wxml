@@ -35,6 +35,10 @@
       <text class="status-text" style="color:{{order.statusColor}}">{{order.statusText}}</text>
       <text class="status-order-id">订单号: {{order.id}}</text>
       <text class="status-time">{{order.timeStr}}</text>
+      <!-- 超时倒计时 -->
+      <view wx:if="{{countdown}}" class="countdown-bar">
+        <text class="countdown-text">⏰ {{countdown}}</text>
+      </view>
       <!-- 取消原因 -->
       <view wx:if="{{order.cancelReason}}" class="cancel-reason">
         <text class="cancel-reason-text">取消原因：{{order.cancelReason}}</text>

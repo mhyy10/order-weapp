@@ -10,6 +10,13 @@
 .status-order-id { font-size: 24rpx; color: var(--text-secondary); display: block; }
 .status-time { font-size: 22rpx; color: var(--text-light); display: block; margin-top: 6rpx; }
 
+/* 倒计时 */
+.countdown-bar {
+  margin-top: 16rpx; padding: 12rpx 24rpx;
+  background: #fff7e6; border-radius: var(--radius-sm);
+}
+.countdown-text { font-size: 26rpx; color: #fa8c16; font-weight: 600; }
+
 /* 取消原因 */
 .cancel-reason {
   margin-top: 16rpx; padding: 12rpx 24rpx;

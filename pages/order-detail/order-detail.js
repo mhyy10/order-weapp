@@ -6,7 +6,8 @@ Page({
   data: {
     order: null,
     loading: true,
-    timeline: []
+    timeline: [],
+    countdown: ''
   },
 
   onLoad(e) {
@@ -25,6 +26,13 @@ Page({
       // 构建订单时间线
       const timeline = this.buildTimeline(order)
       this.setData({ order, timeline, loading: false })
+
+      // 待接单状态启动倒计时
+      if (order.status === 'pending' && order.expireAt) {
+        this.startCountdown(order.expireAt)
+      } else {
+        this.setData({ countdown: '' })
+      }
     }).catch(() => this.setData({ loading: false }))
   },
 
@@ -168,6 +176,27 @@ Page({
   callRider() {
     const phone = this.data.order.delivery && this.data.order.delivery.riderPhone
     if (phone) wx.makePhoneCall({ phoneNumber: phone })
+  },
+
+  startCountdown(expireAt) {
+    this._countdownTimer && clearInterval(this._countdownTimer)
+    this._countdownTimer = setInterval(() => {
+      const diff = new Date(expireAt).getTime() - Date.now()
+      if (diff <= 0) {
+        clearInterval(this._countdownTimer)
+        this.setData({ countdown: '已超时' })
+        // 刷新订单状态
+        if (this.data.order) this.loadOrder(this.data.order.id)
+        return
+      }
+      const min = Math.floor(diff / 60000)
+      const sec = Math.floor((diff % 60000) / 1000)
+      this.setData({ countdown: `${min}分${sec}秒后自动取消` })
+    }, 1000)
+  },
+
+  onUnload() {
+    this._countdownTimer && clearInterval(this._countdownTimer)
   },
 
   onPullDownRefresh() {
