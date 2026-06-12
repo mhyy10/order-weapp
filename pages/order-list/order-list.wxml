@@ -59,7 +59,7 @@
           <view wx:elif="{{item.status === 'completed' && item.reviewed}}" class="review-tag reviewed">已评价</view>
           <!-- 待接单/制作中 显示取消按钮 -->
           <view wx:if="{{item.status === 'pending' || item.status === 'confirmed'}}" class="cancel-tag" catchtap="onCancelOrder" data-id="{{item.id}}">取消</view>
-          <text class="order-total">¥{{item.total}}</text>
+          <text class="order-total">{{f.formatPrice(item.total)}}</text>
         </view>
       </view>
     </view>

@@ -130,19 +130,19 @@
       <view class="divider"></view>
       <view class="summary-row">
         <text class="label">小计</text>
-        <text>¥{{subtotal}}</text>
+        <text>{{f.formatPrice(subtotal)}}</text>
       </view>
       <view class="summary-row" wx:if="{{discount > 0}}">
         <text class="label" style="color:var(--success);">新客立减</text>
-        <text style="color:var(--success);">-¥{{discount}}</text>
+        <text style="color:var(--success);">-{{f.priceNum(discount)}}</text>
       </view>
       <view class="summary-row" wx:if="{{couponDiscount > 0}}">
         <text class="label" style="color:var(--success);">优惠券</text>
-        <text style="color:var(--success);">-¥{{couponDiscount}}</text>
+        <text style="color:var(--success);">-{{f.priceNum(couponDiscount)}}</text>
       </view>
       <view class="summary-row" wx:if="{{pointsDeduction > 0}}">
         <text class="label" style="color:var(--success);">积分抵扣</text>
-        <text style="color:var(--success);">-¥{{pointsDeduction}}</text>
+        <text style="color:var(--success);">-{{f.priceNum(pointsDeduction)}}</text>
       </view>
       <view class="summary-row" wx:if="{{dineType === 'dine_in'}}">
         <text class="label">餐位费</text>
@@ -150,7 +150,7 @@
       </view>
       <view class="summary-row" wx:if="{{dineType === 'delivery' && deliveryFee > 0}}">
         <text class="label">配送费</text>
-        <text>¥{{deliveryFee}}</text>
+        <text>{{f.formatPrice(deliveryFee)}}</text>
       </view>
       <view class="summary-row" wx:if="{{dineType === 'delivery' && deliveryFee === 0 && selectedAddress}}">
         <text class="label" style="color:var(--success);">配送费</text>
@@ -159,7 +159,7 @@
       <view class="divider"></view>
       <view class="summary-row total-row">
         <text style="font-weight:600;">合计</text>
-        <text class="total-price">¥{{total}}</text>
+        <text class="total-price">{{f.formatPrice(total)}}</text>
       </view>
     </view>
 
@@ -172,7 +172,7 @@
           <text class="coupon-item-desc">{{item.couponType === 'reduction' ? '满减券' : '折扣券'}}</text>
         </view>
         <view class="coupon-item-right">
-          <text class="coupon-item-discount">-¥{{item.discount}}</text>
+          <text class="coupon-item-discount">-{{f.priceNum(item.discount)}}</text>
           <view class="coupon-check {{selectedCoupon.userCouponId === item.userCouponId ? 'checked' : ''}}">
             <text wx:if="{{selectedCoupon.userCouponId === item.userCouponId}}">✓</text>
           </view>
@@ -201,7 +201,7 @@
       </view>
       <view wx:if="{{usePoints && pointsDeduction > 0}}" class="points-deduction-row">
         <text class="points-deduction-label">可抵扣</text>
-        <text class="points-deduction-amount">¥{{pointsDeduction}}</text>
+        <text class="points-deduction-amount">{{f.formatPrice(pointsDeduction)}}</text>
       </view>
     </view>
 
@@ -214,7 +214,7 @@
     <!-- Submit -->
     <view class="submit-wrap safe-bottom">
       <view class="btn-primary submit-btn {{submitting ? 'btn-disabled' : ''}}" bindtap="onSubmit">
-        {{submitting ? '提交中...' : '提交订单 ¥' + total}}
+        {{submitting ? '提交中...' : '提交订单 ' + f.formatPrice(total)}}
       </view>
     </view>
   </view>

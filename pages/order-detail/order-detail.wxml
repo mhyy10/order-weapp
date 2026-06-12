@@ -103,15 +103,15 @@
       <view class="summary-row" wx:if="{{order.dineType === 'dine_in'}}"><text class="label">人数</text><text>{{order.peopleCount}} 位</text></view>
       <view class="summary-row" wx:if="{{order.note}}"><text class="label">备注</text><text>{{order.note}}</text></view>
       <view class="divider"></view>
-      <view class="summary-row"><text class="label">小计</text><text>¥{{order.subtotal}}</text></view>
-      <view class="summary-row" wx:if="{{order.discount > 0}}"><text class="label">优惠</text><text style="color:var(--success);">-¥{{order.discount}}</text></view>
-      <view class="summary-row" wx:if="{{order.couponDiscount > 0}}"><text class="label">优惠券</text><text style="color:var(--success);">-¥{{order.couponDiscount}}</text></view>
-      <view class="summary-row" wx:if="{{order.pointsDiscount > 0}}"><text class="label">积分抵扣</text><text style="color:var(--success);">-¥{{order.pointsDiscount}}</text></view>
-      <view class="summary-row" wx:if="{{order.deliveryFee > 0}}"><text class="label">配送费</text><text>¥{{order.deliveryFee}}</text></view>
+      <view class="summary-row"><text class="label">小计</text><text>{{f.formatPrice(order.subtotal)}}</text></view>
+      <view class="summary-row" wx:if="{{order.discount > 0}}"><text class="label">优惠</text><text style="color:var(--success);">-{{f.priceNum(order.discount)}}</text></view>
+      <view class="summary-row" wx:if="{{order.couponDiscount > 0}}"><text class="label">优惠券</text><text style="color:var(--success);">-{{f.priceNum(order.couponDiscount)}}</text></view>
+      <view class="summary-row" wx:if="{{order.pointsDiscount > 0}}"><text class="label">积分抵扣</text><text style="color:var(--success);">-{{f.priceNum(order.pointsDiscount)}}</text></view>
+      <view class="summary-row" wx:if="{{order.deliveryFee > 0}}"><text class="label">配送费</text><text>{{f.formatPrice(order.deliveryFee)}}</text></view>
       <view class="summary-row" wx:if="{{order.dineType === 'delivery' && order.deliveryFee === 0}}"><text class="label">配送费</text><text style="color:var(--success);">免配送费</text></view>
-      <view class="summary-row" wx:if="{{order.dineType === 'dine_in'}}"><text class="label">餐位费</text><text>¥{{order.peopleCount * 3}}</text></view>
+      <view class="summary-row" wx:if="{{order.dineType === 'dine_in'}}"><text class="label">餐位费</text><text>{{f.formatPrice(order.peopleCount * 3)}}</text></view>
       <view class="divider"></view>
-      <view class="summary-row total"><text style="font-weight:600;">合计</text><text class="total-price">¥{{order.total}}</text></view>
+      <view class="summary-row total"><text style="font-weight:600;">合计</text><text class="total-price">{{f.formatPrice(order.total)}}</text></view>
     </view>
 
     <!-- Actions -->
