@@ -37,7 +37,7 @@ Page({
     }
 
     get(API.ORDER.LIST, { userId, page, pageSize: DEFAULT_PAGE_SIZE }).then(result => {
-      const orders = result.orders || result
+      const orders = result.list || result.orders || []
       const formatted = orders.map(o => {
         const dineTypeMap = { dine_in: '堂食', takeaway: '自提', delivery: '配送' }
         return {
@@ -46,7 +46,8 @@ Page({
           statusColor: getStatusColor(o.status),
           dineTypeText: dineTypeMap[o.dineType] || o.dineType,
           timeStr: formatDate(o.createdAt, 'MM-DD HH:mm'),
-          itemCount: o.items.reduce((s, i) => s + i.quantity, 0),
+          itemCount: o._itemCount || o.items.reduce((s, i) => s + i.quantity, 0),
+          hasMore: o._hasMore || false,
           reviewed: false
         }
       })
